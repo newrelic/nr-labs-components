@@ -1,0 +1,34 @@
+{
+  "name": "@newrelic/nr-labs-components",
+  "version": "1.0.0",
+  "description": "New Relic Labs components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/newrelic/nr-labs-components.git"
+  },
+  "author": {
+    "name": "New Relic Labs - Viz",
+    "url": "https://github.com/orgs/newrelic/teams/labs-viz"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/newrelic/nr-labs-components/issues"
+  },
+  "homepage": "https://github.com/newrelic/nr-labs-components#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "dependencies": {
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@newrelic/eslint-plugin-newrelic": "^0.3.1",
+    "eslint": "^6.8.0",
+    "prettier": "^1.19.1"
+  }
+}

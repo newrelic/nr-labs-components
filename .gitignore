@@ -1,0 +1,9 @@
+.nos
+.idea
+.vscode
+node_modules
+coverage
+dist
+tmp
+*.tar.gz
+.DS_Store
