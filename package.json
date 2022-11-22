@@ -31,8 +31,8 @@
     "registry": "https://npm.pkg.github.com"
   },
   "peerDependencies": {
-    "prop-types": "^15.8.1",
-    "react": "^18.2.0"
+    "prop-types": "15.x",
+    "react": "15 - 18"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
