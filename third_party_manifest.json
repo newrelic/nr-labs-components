@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Mon Nov 07 2022 13:33:00 GMT-0800 (Pacific Standard Time)",
+  "lastUpdated": "Tue Nov 22 2022 13:20:39 GMT-0800 (Pacific Standard Time)",
   "projectName": "nr-labs-components",
   "projectUrl": "https://github.com/newrelic/nr-labs-components",
   "includeOptDeps": false,
@@ -29,6 +29,58 @@
     }
   },
   "devDependencies": {
+    "@babel/core@7.20.2": {
+      "name": "@babel/core",
+      "version": "7.20.2",
+      "range": "^7.20.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/babel/babel",
+      "versionedRepoUrl": "https://github.com/babel/babel/tree/v7.20.2",
+      "licenseFile": "node_modules/@babel/core/LICENSE",
+      "licenseUrl": "https://github.com/babel/babel/blob/v7.20.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "The Babel Team",
+      "url": "https://babel.dev/team"
+    },
+    "@babel/plugin-proposal-class-properties@7.18.6": {
+      "name": "@babel/plugin-proposal-class-properties",
+      "version": "7.18.6",
+      "range": "^7.18.6",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/babel/babel",
+      "versionedRepoUrl": "https://github.com/babel/babel/tree/v7.18.6",
+      "licenseFile": "node_modules/@babel/plugin-proposal-class-properties/LICENSE",
+      "licenseUrl": "https://github.com/babel/babel/blob/v7.18.6/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "The Babel Team",
+      "url": "https://babel.dev/team"
+    },
+    "@babel/preset-env@7.20.2": {
+      "name": "@babel/preset-env",
+      "version": "7.20.2",
+      "range": "^7.20.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/babel/babel",
+      "versionedRepoUrl": "https://github.com/babel/babel/tree/v7.20.2",
+      "licenseFile": "node_modules/@babel/preset-env/LICENSE",
+      "licenseUrl": "https://github.com/babel/babel/blob/v7.20.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "The Babel Team",
+      "url": "https://babel.dev/team"
+    },
+    "@babel/preset-react@7.18.6": {
+      "name": "@babel/preset-react",
+      "version": "7.18.6",
+      "range": "^7.18.6",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/babel/babel",
+      "versionedRepoUrl": "https://github.com/babel/babel/tree/v7.18.6",
+      "licenseFile": "node_modules/@babel/preset-react/LICENSE",
+      "licenseUrl": "https://github.com/babel/babel/blob/v7.18.6/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "The Babel Team",
+      "url": "https://babel.dev/team"
+    },
     "@newrelic/eslint-plugin-newrelic@0.3.1": {
       "name": "@newrelic/eslint-plugin-newrelic",
       "version": "0.3.1",
@@ -40,6 +92,58 @@
       "licenseUrl": "https://github.com/NewRelic/eslint-plugin-newrelic/blob/v0.3.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic"
+    },
+    "@rollup/plugin-commonjs@23.0.2": {
+      "name": "@rollup/plugin-commonjs",
+      "version": "23.0.2",
+      "range": "^23.0.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/rollup/plugins",
+      "versionedRepoUrl": "https://github.com/rollup/plugins/tree/v23.0.2",
+      "licenseFile": "node_modules/@rollup/plugin-commonjs/LICENSE",
+      "licenseUrl": "https://github.com/rollup/plugins/blob/v23.0.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Rich Harris",
+      "email": "richard.a.harris@gmail.com"
+    },
+    "@rollup/plugin-node-resolve@15.0.1": {
+      "name": "@rollup/plugin-node-resolve",
+      "version": "15.0.1",
+      "range": "^15.0.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/rollup/plugins",
+      "versionedRepoUrl": "https://github.com/rollup/plugins/tree/v15.0.1",
+      "licenseFile": "node_modules/@rollup/plugin-node-resolve/LICENSE",
+      "licenseUrl": "https://github.com/rollup/plugins/blob/v15.0.1/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Rich Harris",
+      "email": "richard.a.harris@gmail.com"
+    },
+    "@rollup/plugin-url@8.0.1": {
+      "name": "@rollup/plugin-url",
+      "version": "8.0.1",
+      "range": "^8.0.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/rollup/plugins",
+      "versionedRepoUrl": "https://github.com/rollup/plugins/tree/v8.0.1",
+      "licenseFile": "node_modules/@rollup/plugin-url/README.md",
+      "licenseUrl": "https://github.com/rollup/plugins/blob/v8.0.1/README.md",
+      "licenseTextSource": "spdx",
+      "publisher": "Arpad Borsos",
+      "email": "arpad.borsos@googlemail.com"
+    },
+    "@svgr/rollup@6.5.1": {
+      "name": "@svgr/rollup",
+      "version": "6.5.1",
+      "range": "^6.5.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/gregberge/svgr/tree/main/packages/rollup",
+      "versionedRepoUrl": "https://github.com/gregberge/svgr/tree/main/packages/rollup/tree/v6.5.1",
+      "licenseFile": "node_modules/@svgr/rollup/LICENSE",
+      "licenseUrl": "https://github.com/gregberge/svgr/tree/main/packages/rollup/blob/v6.5.1/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Greg Bergé",
+      "email": "berge.greg@gmail.com"
     },
     "eslint@6.8.0": {
       "name": "eslint",
@@ -65,6 +169,68 @@
       "licenseUrl": "https://github.com/prettier/prettier/blob/v1.19.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "James Long"
+    },
+    "rimraf@3.0.2": {
+      "name": "rimraf",
+      "version": "3.0.2",
+      "range": "^3.0.2",
+      "licenses": "ISC",
+      "repoUrl": "https://github.com/isaacs/rimraf",
+      "versionedRepoUrl": "https://github.com/isaacs/rimraf/tree/v3.0.2",
+      "licenseFile": "node_modules/rimraf/LICENSE",
+      "licenseUrl": "https://github.com/isaacs/rimraf/blob/v3.0.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Isaac Z. Schlueter",
+      "email": "i@izs.me",
+      "url": "http://blog.izs.me/"
+    },
+    "rollup-plugin-babel@4.4.0": {
+      "name": "rollup-plugin-babel",
+      "version": "4.4.0",
+      "range": "^4.4.0",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/rollup/rollup-plugin-babel",
+      "versionedRepoUrl": "https://github.com/rollup/rollup-plugin-babel/tree/v4.4.0",
+      "licenseFile": "node_modules/rollup-plugin-babel/LICENSE.md",
+      "licenseUrl": "https://github.com/rollup/rollup-plugin-babel/blob/v4.4.0/LICENSE.md",
+      "licenseTextSource": "file",
+      "publisher": "Rich Harris"
+    },
+    "rollup-plugin-peer-deps-external@2.2.4": {
+      "name": "rollup-plugin-peer-deps-external",
+      "version": "2.2.4",
+      "range": "^2.2.4",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/pmowrer/rollup-plugin-peer-deps-external",
+      "versionedRepoUrl": "https://github.com/pmowrer/rollup-plugin-peer-deps-external/tree/v2.2.4",
+      "licenseFile": "node_modules/rollup-plugin-peer-deps-external/LICENSE",
+      "licenseUrl": "https://github.com/pmowrer/rollup-plugin-peer-deps-external/blob/v2.2.4/LICENSE",
+      "licenseTextSource": "file"
+    },
+    "rollup-plugin-postcss@4.0.2": {
+      "name": "rollup-plugin-postcss",
+      "version": "4.0.2",
+      "range": "^4.0.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/egoist/rollup-plugin-postcss",
+      "versionedRepoUrl": "https://github.com/egoist/rollup-plugin-postcss/tree/v4.0.2",
+      "licenseFile": "node_modules/rollup-plugin-postcss/LICENSE",
+      "licenseUrl": "https://github.com/egoist/rollup-plugin-postcss/blob/v4.0.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "EGOIST",
+      "email": "0x142857@gmail.com"
+    },
+    "rollup@2.79.1": {
+      "name": "rollup",
+      "version": "2.79.1",
+      "range": "^2.79.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/rollup/rollup",
+      "versionedRepoUrl": "https://github.com/rollup/rollup/tree/v2.79.1",
+      "licenseFile": "node_modules/rollup/LICENSE.md",
+      "licenseUrl": "https://github.com/rollup/rollup/blob/v2.79.1/LICENSE.md",
+      "licenseTextSource": "file",
+      "publisher": "Rich Harris"
     }
   }
 }
