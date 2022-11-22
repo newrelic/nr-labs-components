@@ -30,7 +30,7 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "dependencies": {
+  "peerDependencies": {
     "prop-types": "^15.8.1",
     "react": "^18.2.0"
   },
