@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import RemoveIcon from './remove.svg';
 
+import styles from './label.scss';
+
 const Label = ({ value, onRemove }) => {
   const removeClickHandler = evt => {
     evt.stopPropagation();
@@ -10,10 +12,10 @@ const Label = ({ value, onRemove }) => {
   };
 
   return (
-    <span className="nrlabs-multi-select-label">
-      <span className="nrlabs-multi-select-label-text">{value}</span>
+    <span className={styles.label}>
+      <span className={styles.text}>{value}</span>
       <span
-        className="nrlabs-multi-select-label-remove"
+        className={styles.remove}
         onClick={removeClickHandler}
       >
         <img src={RemoveIcon} alt="remove" />

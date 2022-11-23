@@ -1,49 +1,24 @@
-.nrlabs-multi-select {
+.multiselect {
   width: 100%;
 
-  .nrlabs-multi-select-input-field {
+  .field {
     background-color: #f3f4f4;
     border: 1px solid #cdd3d5;
     border-radius: 4px;
     padding: 8px 8px 2px;
     display: flex;
-    // padding-bottom: 2px;
 
-    .nrlabs-multi-select-input-field-icon {
+    .icon {
       width: 16px;
       height: 16px;
       margin-right: 8px;
     }
 
-    .nrlabs-multi-select-input-field-input {
+    .input {
       flex: 1;
       font-size: 12px;
       line-height: 16px;
       cursor: text;
-
-      .nrlabs-multi-select-label {
-        display: inline-flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding: 1px 4px;
-        background-color: #e1edff;
-        border-radius: 3px;
-        color: #0b6acb;
-        margin-right: 8px;
-        margin-bottom: 6px;
-
-        .nrlabs-multi-select-label-text {
-          flex: none;
-          order: 0;
-          flex-grow: 0;
-        }
-
-        .nrlabs-multi-select-label-remove {
-          margin-left: 4px;
-          cursor: pointer;
-        }
-      }
 
       &.placeholder {
         color: #6b757b;
@@ -54,10 +29,7 @@
     }
   }
 
-  .nrlabs-multi-select-list {
-    // display: flex;
-    // flex-direction: column;
-    // align-items: flex-start;
+  .list {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 8px;
@@ -69,7 +41,7 @@
     position: absolute;
     z-index: 1;
 
-    .nrlabs-multi-select-list-item {
+    .item {
       align-items: center;
       display: inline-flex;
 
