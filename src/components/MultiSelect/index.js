@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import GroupByIcon from './group.svg';
 import Label from './label';
 
+import styles from './index.scss';
+
 const MultiSelect = ({ items, onChange }) => {
   const thisComponent = useRef();
   const inputField = useRef();
@@ -69,14 +71,14 @@ const MultiSelect = ({ items, onChange }) => {
     inputField && inputField.current ? (itemsListWidth - 32) / 2 : 'auto';
 
   return (
-    <div className="nrlabs-multi-select" ref={thisComponent}>
-      <div className="nrlabs-multi-select-input-field" ref={inputField}>
-        <div className="nrlabs-multi-select-input-field-icon">
+    <div className={styles.multiselect} ref={thisComponent}>
+      <div className={styles.field} ref={inputField}>
+        <div className={styles.icon}>
           <img src={GroupByIcon} alt="group by" />
         </div>
         <div
-          className={`nrlabs-multi-select-input-field-input ${
-            !selectedItems.length ? 'placeholder' : ''
+          className={`${styles.input} ${
+            !selectedItems.length ? styles.placeholder : null
           }`}
           onClick={() => setShowItemsList(!showItemsList)}
         >
@@ -92,12 +94,12 @@ const MultiSelect = ({ items, onChange }) => {
       </div>
       {showItemsList ? (
         <div
-          className="nrlabs-multi-select-list"
+          className={styles.list}
           style={{ width: itemsListWidth }}
         >
           {items.map((item, i) => (
             <div
-              className="nrlabs-multi-select-list-item"
+              className={styles.item}
               style={{ width: checkboxWidth }}
               key={i}
             >
