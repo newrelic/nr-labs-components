@@ -4,7 +4,7 @@
 
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr-labs-components?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr-labs-components/badge.svg)](https://snyk.io/test/github/newrelic/nr-labs-components)
 
-A library of React components created by New Relic's [Labs-Viz team](https://github.com/orgs/newrelic/teams/labs-viz), primarily for use in [apps built for the New Relic One  platform](https://developer.newrelic.com/build-apps/).
+A library of React components created by New Relic's [Labs-Viz team](https://github.com/orgs/newrelic/teams/labs-viz), primarily for use in [apps built for the New Relic One platform](https://developer.newrelic.com/build-apps/).
 
 ## Installation
 
@@ -16,7 +16,7 @@ npm install --save @newrelic/nr-labs-components
 
 ### [MultiSelect](src/components/MultiSelect)
 
-
+### [HelpModal](src/components/HelpModal)
 
 ## Open Source License
 
@@ -30,7 +30,7 @@ We encourage you to bring your experiences and questions to the [Explorers Hub](
 
 ### Community
 
-New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices. 
+New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices.
 
 ### Issues / Enhancement Requests
 
