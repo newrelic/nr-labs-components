@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2022-11-22
+### Added
+- HelpModal component by [@aso1124](https://github.com/aso1124)
+
 ## [1.2.0] - 2022-11-22
 ### Changed
 - Using css modules to inject styles for MultiSelect
@@ -28,19 +32,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2022-10-20
 ### Added
 - MultiSelect component by [@amit-y](https://github.com/amit-y).
-
-### Changed
-- 
-
-### Deprecated
-- 
-
-### Removed
-- 
-
-### Fixed
-- 
-
-### Security
-- 
-
