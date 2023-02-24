@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2023-02-24
+### Added
+- Messages component by [@aso1124](https://github.com/aso1124)
+
 ## [1.3.0] - 2022-11-22
 ### Added
 - HelpModal component by [@aso1124](https://github.com/aso1124)
