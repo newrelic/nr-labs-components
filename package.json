@@ -1,6 +1,6 @@
 {
   "name": "@newrelic/nr-labs-components",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "New Relic Labs components",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -53,5 +53,8 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.57.1"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.7"
   }
 }
