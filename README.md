@@ -18,6 +18,8 @@ npm install --save @newrelic/nr-labs-components
 
 ### [HelpModal](src/components/HelpModal)
 
+### [Messages](src/components/Messages)
+
 ## Open Source License
 
 This project is distributed under the [Apache 2 license](LICENSE).
