@@ -29,7 +29,7 @@ The Help Modal is an add-on which allows you to embed links directly to your doc
 
 This example adds a "Help" button to the New Relic nerdlet action bar, which opens the modal when clicked.
 
-```
+```js
 import React, { useState, useEffect } from 'react';
 import { nerdlet, Icon } from "nr1"
 import { HelpModal } from "@newrelic/nr-labs-components"
