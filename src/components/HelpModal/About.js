@@ -6,7 +6,7 @@ const About = ({ appName, blurb, moreInfo }) => {
   return (
     <div style={{ marginBottom: '2rem' }}>
       <HeadingText type={HeadingText.TYPE.HEADING_3}>
-        About {`${appName || 'this app'}`}
+        About {appName || 'this app'}
       </HeadingText>
       <BlockText>{blurb}</BlockText>
       {moreInfo && (
