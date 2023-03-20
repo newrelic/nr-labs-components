@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Icon, Spinner } from 'nr1';
+import About from './About';
 import HelpLink from './HelpLink';
 import OwnerBadge from './OwnerBadge';
 
-const HelpModal = ({ isModalOpen, setModalOpen, urls, ownerBadge }) => {
+const HelpModal = ({
+  children,
+  isModalOpen,
+  setModalOpen,
+  about,
+  urls,
+  ownerBadge
+}) => {
   const [loadingBadge, setLoadingBadge] = useState(true);
 
   return (
@@ -13,6 +21,8 @@ const HelpModal = ({ isModalOpen, setModalOpen, urls, ownerBadge }) => {
         <Spinner />
       ) : (
         <>
+          {about && <About {...about} />}
+          {children}
           {urls.docs && (
             <HelpLink
               title="Open the Documentation"
@@ -55,19 +65,28 @@ const HelpModal = ({ isModalOpen, setModalOpen, urls, ownerBadge }) => {
 };
 
 HelpModal.propTypes = {
+  children: PropTypes.node,
   isModalOpen: PropTypes.bool,
   setModalOpen: PropTypes.func.isRequired,
+  about: PropTypes.shape({
+    appName: PropTypes.string,
+    blurb: PropTypes.string.isRequired,
+    moreInfo: PropTypes.shape({
+      link: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired
+    })
+  }),
   urls: PropTypes.shape({
     docs: PropTypes.string,
     createIssue: PropTypes.string,
     createQuestion: PropTypes.string,
-    createFeature: PropTypes.string,
+    createFeature: PropTypes.string
   }),
-  ownerBadge: PropTypes.object,
+  ownerBadge: PropTypes.object
 };
 
 HelpModal.defaultProps = {
-  isModalOpen: false,
+  isModalOpen: false
 };
 
 export default HelpModal;
