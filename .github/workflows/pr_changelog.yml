@@ -1,0 +1,42 @@
+on: 
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      
+      - name: Check for changelog
+        id: check-changelog
+        run: |
+          echo "count=$(git diff --name-only -r HEAD^1 HEAD | grep -c '^CHANGELOG.md$')" >> $GITHUB_OUTPUT
+      
+      - name: Set comment body
+        id: comment-body
+        run: |
+          if ${{ steps.check-changelog.outputs.count == 0 }}; then
+            echo "content=❗ `CHANGELOG.md` has not been updated." >> $GITHUB_OUTPUT
+          else
+            echo "content=👍  Updated `CHANGELOG.md` found." >> $GITHUB_OUTPUT
+          fi
+      
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: steps.comment-body.outputs.content
+            })
