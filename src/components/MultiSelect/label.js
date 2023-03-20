@@ -14,10 +14,7 @@ const Label = ({ value, onRemove }) => {
   return (
     <span className={styles.label}>
       <span className={styles.text}>{value}</span>
-      <span
-        className={styles.remove}
-        onClick={removeClickHandler}
-      >
+      <span className={styles.remove} onClick={removeClickHandler}>
         <img src={RemoveIcon} alt="remove" />
       </span>
     </span>

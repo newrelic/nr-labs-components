@@ -93,10 +93,7 @@ const MultiSelect = ({ items, onChange }) => {
         </div>
       </div>
       {showItemsList ? (
-        <div
-          className={styles.list}
-          style={{ width: itemsListWidth }}
-        >
+        <div className={styles.list} style={{ width: itemsListWidth }}>
           {items.map((item, i) => (
             <div
               className={styles.item}
