@@ -27,9 +27,6 @@
     "url": "https://github.com/newrelic/nr-labs-components/issues"
   },
   "homepage": "https://github.com/newrelic/nr-labs-components#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "peerDependencies": {
     "nr1": "",
     "prop-types": "15.x",
