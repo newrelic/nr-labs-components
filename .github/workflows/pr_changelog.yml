@@ -25,9 +25,9 @@ jobs:
         id: comment-body
         run: |
           if ${{ steps.check-changelog.outputs.count == 0 }}; then
-            echo "content=❗ `CHANGELOG.md` has not been updated." >> $GITHUB_OUTPUT
+            echo "content=❗ **CHANGELOG.md** has not been updated." >> $GITHUB_OUTPUT
           else
-            echo "content=👍 Updated `CHANGELOG.md` found." >> $GITHUB_OUTPUT
+            echo "content=👍 Updated **CHANGELOG.md** found." >> $GITHUB_OUTPUT
           fi
       
       - uses: actions/github-script@v6
