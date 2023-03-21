@@ -24,6 +24,7 @@ jobs:
       - name: Set comment body
         id: comment-body
         run: |
+          echo ${{ steps.check-changelog.outputs.count }}
           if ${{ steps.check-changelog.outputs.count == 0 }}; then
             echo "content=❗ **CHANGELOG.md** has not been updated." >> $GITHUB_OUTPUT
           else
