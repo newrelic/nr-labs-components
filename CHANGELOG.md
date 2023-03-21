@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## TEST
 
-- Testing workflow to check for changes to this file, and again, and again, and again
+- Testing workflow to check for changes to this file, and again, and again, and again, and again
 
 ## [1.5.0] - 2023-03-20
 
