@@ -19,12 +19,11 @@ jobs:
       - name: Check for changelog
         id: check-changelog
         run: |
-          echo "count=$(git diff --name-only -r HEAD^1 HEAD | grep -c '^CHANGELOG.md$')" >> $GITHUB_OUTPUT
+          echo "count=$(git diff --name-only -r HEAD~1 HEAD | grep -c '^CHANGELOG.md$')" >> $GITHUB_OUTPUT
       
       - name: Set comment body
         id: comment-body
         run: |
-          echo ${{ steps.check-changelog.outputs.count }}
           if ${{ steps.check-changelog.outputs.count == 0 }}; then
             echo "content=❗ **CHANGELOG.md** has not been updated." >> $GITHUB_OUTPUT
           else
