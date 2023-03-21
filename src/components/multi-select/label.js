@@ -6,7 +6,7 @@ import RemoveIcon from './remove.svg';
 import styles from './label.scss';
 
 const Label = ({ value, onRemove }) => {
-  const removeClickHandler = evt => {
+  const removeClickHandler = (evt) => {
     evt.stopPropagation();
     if (onRemove) onRemove(evt);
   };
@@ -23,7 +23,7 @@ const Label = ({ value, onRemove }) => {
 
 Label.propTypes = {
   value: PropTypes.string,
-  onRemove: PropTypes.func
+  onRemove: PropTypes.func,
 };
 
 export default Label;
