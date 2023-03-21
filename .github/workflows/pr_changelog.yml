@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  welcome:
+  check-changelog-updates:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
