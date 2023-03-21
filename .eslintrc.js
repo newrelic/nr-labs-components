@@ -1,18 +1,22 @@
 module.exports = {
+  extends: [
+    'eslint:recommended',
+    'plugin:import/recommended',
+    'plugin:promise/recommended',
+    'plugin:eslint-comments/recommended',
+    'plugin:react/recommended',
+    'plugin:jest/style',
+    'plugin:jest/recommended',
+    'plugin:prettier/recommended'
+  ],
   env: {
     browser: true,
-    es6: true
+    es6: true,
+    jest: true
   },
-  extends: [
-    'plugin:@newrelic/eslint-plugin-newrelic/react',
-    'plugin:@newrelic/eslint-plugin-newrelic/jest',
-    'plugin:@newrelic/eslint-plugin-newrelic/prettier'
-  ],
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    __nr: true
   },
-  parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
       jsx: true
@@ -20,11 +24,20 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: ['react', 'prettier'],
+  plugins: [
+    'import',
+    'promise',
+    'eslint-comments',
+    'react',
+    'jest',
+    'prettier'
+  ],
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
   rules: {
-    'prettier/prettier': 'error',
-    'react/prop-types': 0,
-    'eslint-comments/no-unlimited-disable': 0,
-    'import/no-named-as-default': 0
+    'no-empty-function': ['error', { allow: ['arrowFunctions'] }]
   }
 };
