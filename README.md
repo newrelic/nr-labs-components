@@ -6,7 +6,7 @@
 
 A library of React components created by New Relic's [Labs-Viz team](https://github.com/orgs/newrelic/teams/labs-viz), primarily for use in [apps built for the New Relic One platform](https://developer.newrelic.com/build-apps/).
 
-## Installation  
+## Installation   
 
 ```bash
 npm install --save @newrelic/nr-labs-components
