@@ -19,6 +19,7 @@ jobs:
       - name: Check for changelog
         id: check-changelog
         run: |
+          echo "(git diff --name-only -r HEAD~1 HEAD | xargs)"
           echo "count=$(git diff --name-only -r HEAD~1 HEAD | grep -c '^CHANGELOG.md$')" >> $GITHUB_OUTPUT
       
       - name: Set comment body
