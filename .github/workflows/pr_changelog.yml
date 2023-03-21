@@ -14,12 +14,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       
       - name: Check for changelog
         id: check-changelog
         run: |
-          echo "$(git diff --name-only -r HEAD~1 HEAD | xargs)"
+          echo "$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | xargs)"
           echo "count=$(git diff --name-only -r HEAD~1 HEAD | grep -c '^CHANGELOG.md$')" >> $GITHUB_OUTPUT
       
       - name: Set comment body
