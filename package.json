@@ -32,7 +32,8 @@
   "peerDependencies": {
     "nr1": "",
     "prop-types": "15.x",
-    "react": "15 - 18"
+    "react": "15 - 18",
+    "react-dom": "15 - 18"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
