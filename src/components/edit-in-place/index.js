@@ -45,7 +45,7 @@ const EditInPlace = forwardRef(
     );
 
     // set text from value prop
-    useEffect(() => sanitizeAndSetText(value), [value]);
+    useEffect(() => setText(value), [value]);
 
     // set caret position after text change
     useEffect(
@@ -53,21 +53,16 @@ const EditInPlace = forwardRef(
       [text]
     );
 
-    // strip whitespace from text and save to state
-    const sanitizeAndSetText = useCallback((t) =>
-      setText(t.replace(/\s/g, ' '))
-    );
-
     // save value on blur
     const blurHandler = useCallback(() => {
-      if (setValue) setValue(text);
+      if (setValue) setValue(text.replace(/\s/g, ' '));
     }, [text, setValue]);
 
     // update text on input
     const inputHandler = useCallback((evt) => {
       const { target: { textContent } = {} } = evt;
       caretPosition.current = getCaretPosition(editableRef.current);
-      sanitizeAndSetText(textContent);
+      setText(textContent);
     });
 
     const keyDownHandler = useCallback((evt) => {
@@ -103,7 +98,7 @@ const EditInPlace = forwardRef(
 
       editableRef.current.normalize();
       caretPosition.current = getCaretPosition(editableRef.current);
-      sanitizeAndSetText(editableRef.current.childNodes?.[0]?.textContent);
+      setText(editableRef.current.childNodes?.[0]?.textContent);
     });
 
     // get caret position
