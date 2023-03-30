@@ -4,8 +4,8 @@ import { shallow } from 'enzyme';
 import Label from './label';
 
 describe('Label component', () => {
-  const label = "Foo";
-  
+  const label = 'Foo';
+
   it('displays a span', () => {
     const wrapper = shallow(<Label value={label} />);
     expect(wrapper.type()).toBe('span');
