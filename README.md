@@ -20,6 +20,8 @@ npm install --save @newrelic/nr-labs-components
 
 ### [Messages](src/components/Messages)
 
+### [EditInPlace](src/components/edit-in-place)
+
 ## Open Source License
 
 This project is distributed under the [Apache 2 license](LICENSE).
