@@ -55,7 +55,7 @@ const EditInPlace = forwardRef(
 
     // remove whitespaces and save value on blur
     const blurHandler = useCallback(() => {
-      if (setValue) setValue(text.replace(/\s/g, ' '));
+      if (setValue) setValue(text.replace(/[\s\u00A0]+/g, ' ').trim());
     }, [text, setValue]);
 
     // update text on input
