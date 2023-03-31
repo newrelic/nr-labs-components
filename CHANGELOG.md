@@ -9,7 +9,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.7.0] - 2023-03-31
 
+### Added 
+
 - timeRangeToNrql by [@aso1124](https://github.com/aso1124)
+
+## [1.6.5] - 2023-03-31
+
+### Added
+
+- `example.json` file for the `Messages` component
+
+## [1.6.4] - 2023-03-30
+
+### Fixed
+
+- Removes non-breaking spaces and trims the text returned by `setValue` in `EditInPlace`
+
+## [1.6.3] - 2023-03-30
+
+### Fixed
+
+- [#43](https://github.com/newrelic/nr-labs-components/issues/43)
+
+## [1.6.2] - 2023-03-30
+
+### Changed
+
+- Switch the JSX transform to classic
+
+## [1.6.1] - 2023-03-30
+
+### Changed
+
+- Added react-dom to the peer dependency list
 
 ## [1.6.0] - 2023-03-30
 
