@@ -1,6 +1,6 @@
 {
   "name": "@newrelic/nr-labs-components",
-  "version": "1.5.1",
+  "version": "1.6.4",
   "description": "New Relic Labs components",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -14,7 +14,7 @@
     "lint:fix": "eslint src/ --fix",
     "prepare": "npm run build",
     "start": "rollup -c -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -32,7 +32,8 @@
   "peerDependencies": {
     "nr1": "",
     "prop-types": "15.x",
-    "react": "15 - 18"
+    "react": "15 - 18",
+    "react-dom": "15 - 18"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
@@ -45,6 +46,8 @@
     "@semantic-release/git": "^10.0.1",
     "@svgr/rollup": "^6.5.1",
     "babel-jest": "^29.5.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.7",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
@@ -54,6 +57,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
     "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "prettier": "^2.8.6",
     "rimraf": "^3.0.2",
     "rollup": "^2.79.1",

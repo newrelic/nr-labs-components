@@ -26,9 +26,9 @@ Each message object consists of the following attributes:
 
 #### example
 
-```
+```json
 {
-  messages: [
+  "messages": [
     {
       "date": "2023-02-20",
       "title": "Info",
