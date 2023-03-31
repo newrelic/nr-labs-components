@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Icon, Spinner } from 'nr1';
-import About from './About';
-import HelpLink from './HelpLink';
-import OwnerBadge from './OwnerBadge';
+import About from './about';
+import HelpLink from './help-link';
+import OwnerBadge from './owner-badge';
 
 const HelpModal = ({
   children,
