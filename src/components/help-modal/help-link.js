@@ -18,7 +18,7 @@ const HelpLink = ({ title, icon, url }) => (
 HelpLink.propTypes = {
   title: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired
+  url: PropTypes.string.isRequired,
 };
 
 export default HelpLink;

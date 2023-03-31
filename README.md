@@ -16,9 +16,9 @@ npm install --save @newrelic/nr-labs-components
 
 ### [MultiSelect](src/components/multi-select)
 
-### [HelpModal](src/components/HelpModal)
+### [HelpModal](src/components/help-modal)
 
-### [Messages](src/components/Messages)
+### [Messages](src/components/messages)
 
 ### [EditInPlace](src/components/edit-in-place)
 
