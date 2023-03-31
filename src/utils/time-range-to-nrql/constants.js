@@ -1,0 +1,9 @@
+export const MINUTE = 60000;
+export const HOUR = 60 * MINUTE;
+export const DAY = 24 * HOUR;
+export const DEFAULT_30_MINS_AGO = 'SINCE 30 MINUTES AGO';
+export const SINCE = 'SINCE';
+export const UNTIL = 'UNTIL';
+export const MINUTES_AGO = 'MINUTES AGO';
+export const HOURS_AGO = 'HOURS AGO';
+export const DAYS_AGO = 'DAYS AGO';
