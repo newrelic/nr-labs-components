@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Icon, Spinner } from 'nr1';
-import About from './about';
-import HelpLink from './help-link';
-import OwnerBadge from './owner-badge';
+import About from './About';
+import HelpLink from './HelpLink';
+import OwnerBadge from './OwnerBadge';
 
 const HelpModal = ({
   children,
@@ -11,7 +11,7 @@ const HelpModal = ({
   setModalOpen,
   about,
   urls,
-  ownerBadge,
+  ownerBadge
 }) => {
   const [loadingBadge, setLoadingBadge] = useState(true);
 
@@ -73,20 +73,20 @@ HelpModal.propTypes = {
     blurb: PropTypes.string.isRequired,
     moreInfo: PropTypes.shape({
       link: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-    }),
+      text: PropTypes.string.isRequired
+    })
   }),
   urls: PropTypes.shape({
     docs: PropTypes.string,
     createIssue: PropTypes.string,
     createQuestion: PropTypes.string,
-    createFeature: PropTypes.string,
+    createFeature: PropTypes.string
   }),
-  ownerBadge: PropTypes.object,
+  ownerBadge: PropTypes.object
 };
 
 HelpModal.defaultProps = {
-  isModalOpen: false,
+  isModalOpen: false
 };
 
 export default HelpModal;
