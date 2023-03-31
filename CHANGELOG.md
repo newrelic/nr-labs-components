@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2023-03-31
+
 - timeRangeToNrql by [@aso1124](https://github.com/aso1124)
 
 ## [1.6.0] - 2023-03-30
