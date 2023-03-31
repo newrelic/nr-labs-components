@@ -1,7 +1,5 @@
 import { timeRangeToNrql } from '.';
 import {
-  DAY,
-  HOUR,
   SINCE,
   UNTIL,
   DEFAULT_30_MINS_AGO,
@@ -34,26 +32,26 @@ test('conversion of begin_time and end_time', () => {
   );
 });
 
-test('conversion of duration to minutes', () => {
+test('conversion of duration ms to minutes', () => {
   const duration = 3540000;
-  const convertedDuration = 59;
+  const expectedDurationInMinutes = 59;
   expect(timeRangeToNrql({ timeRange: { duration } })).toBe(
-    `${SINCE} ${convertedDuration} ${MINUTES_AGO}`
+    `${SINCE} ${expectedDurationInMinutes} ${MINUTES_AGO}`
   );
 });
 
-test('conversion of duration to hours', () => {
-  const duration = HOUR * 3;
-  const convertedDuration = 3;
+test('conversion of duration ms to hours', () => {
+  const duration = 10800000;
+  const expectDurationInHours = 3;
   expect(timeRangeToNrql({ timeRange: { duration } })).toBe(
-    `${SINCE} ${convertedDuration} ${HOURS_AGO}`
+    `${SINCE} ${expectDurationInHours} ${HOURS_AGO}`
   );
 });
 
-test('conversion of duration to days', () => {
-  const duration = DAY * 3;
-  const convertedDuration = 3;
+test('conversion of duration ms to days', () => {
+  const duration = 259200000;
+  const expectedDurationInDays = 3;
   expect(timeRangeToNrql({ timeRange: { duration } })).toBe(
-    `${SINCE} ${convertedDuration} ${DAYS_AGO}`
+    `${SINCE} ${expectedDurationInDays} ${DAYS_AGO}`
   );
 });
