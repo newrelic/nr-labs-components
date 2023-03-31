@@ -5,8 +5,8 @@ import dayjs from 'dayjs';
 
 const COLLECTION_ID = 'USER_MSGS_CONFIG';
 const DOCUMENT_ID = 'nerdpack_messages';
-const getMessageId = (msg) => msg.date.concat(msg.desc.substring(0, 30));
-const getMessageType = (level) => {
+const getMessageId = msg => msg.date.concat(msg.desc.substring(0, 30));
+const getMessageType = level => {
   switch (level) {
     case 'critical':
       return SectionMessage.TYPE.CRITICAL;
@@ -68,9 +68,9 @@ const Messages = ({
 
     const filterMessages = (cfg, msgs) => {
       const filteredMessages = msgs
-        .filter((m) => m.date && m.desc) // remove messages missing required attributes
-        .filter((m) => isMessageActive(m.date, timeoutPeriod)) // remove old messages
-        .filter((m) => {
+        .filter(m => m.date && m.desc) // remove messages missing required attributes
+        .filter(m => isMessageActive(m.date, timeoutPeriod)) // remove old messages
+        .filter(m => {
           const dismissed = cfg?.dismissed || [];
           for (let z = 0; z < dismissed.length; z++) {
             if (getMessageId(m) === dismissed[z].id) {
@@ -83,9 +83,9 @@ const Messages = ({
     };
 
     loadConfig()
-      .then((cfg) => fetchMessages().then((msgs) => filterMessages(cfg, msgs)))
+      .then(cfg => fetchMessages().then(msgs => filterMessages(cfg, msgs)))
       // eslint-disable-next-line no-console
-      .catch((e) => console.error('error loading messages', e));
+      .catch(e => console.error('error loading messages', e));
   }, []);
 
   useEffect(() => {
@@ -99,16 +99,16 @@ const Messages = ({
     loadMessages();
   }, [loadMessages]);
 
-  const dismissMessage = async (msg) => {
+  const dismissMessage = async msg => {
     const id = getMessageId(msg);
 
     // remove the message from state
-    setMessages((existingMessages) =>
-      existingMessages.filter((m) => getMessageId(m) !== id)
+    setMessages(existingMessages =>
+      existingMessages.filter(m => getMessageId(m) !== id)
     );
 
     // save the message as dismissed for this user
-    const newDismissed = dismissed.filter((d) =>
+    const newDismissed = dismissed.filter(d =>
       isMessageActive(d.date, timeoutPeriod)
     );
     newDismissed.push({ id, date: msg.date });
