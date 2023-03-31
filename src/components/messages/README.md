@@ -87,7 +87,7 @@ The `Messages` component will automatically reload the messages file once every 
 
 `directory`: The directory within the repo where the file is located. Optional - default is root
 
-`filename`: The name of the messages file. Optional - default is `messages`
+`fileName`: The name of the messages file. Optional - default is `messages`
 
 `timeoutPeriod`: The duration in seconds after which messages will no longer be displayed. Optional - default is `1210000` (2 weeks)
 
@@ -99,7 +99,7 @@ The `Messages` component will automatically reload the messages file once every 
 
 At its most basic, you only need to provide the repo name. In this example, the Messages component will load messages from the hypothetical location `https://raw.githubusercontent.com/newrelic/messages-example/main/messages.json`. Messages older than 2 weeks will not be displayed.
 
-```
+```jsx
 ...
 import { Messages } from "@newrelic/nr-labs-components"
 ...
@@ -117,7 +117,7 @@ const Nerdlet = (props) => {
 
 In this example, the `Messages` component will load messages from the hypothetical location `https://raw.githubusercontent.com/newrelic-experimental/messages-example/dev/nerdlet/mymessages.json`. Messages older then 3 days will not be displayed.
 
-```
+```jsx
 ...
 import { Messages } from "@newrelic/nr-labs-components"
 ...
@@ -126,12 +126,13 @@ const Nerdlet = (props) => {
   return (
     <>
     <Messages
-      org='newrelic-experimental'
-      repo='messages-example'
-      branch='dev'
-      directory='nerdlet'
-      file='mymessages'
-      timeoutPeriod={259200} />
+      org='newrelic'
+      repo='nr-labs-components'
+      branch='main'
+      directory='src/components/messages'
+      fileName='example'
+      timeoutPeriod={8*7*24*60*60} // 8 weeks
+    />
     ...
     </>
   )
