@@ -1,6 +1,6 @@
 # timeRangeToNrql
 
-The `timeRangeToNrql` utility converts the [timeRange](https://developer.newrelic.com/components/platform-state-context) provided by the New Relic platform into NRQL a compliant time clause.
+The `timeRangeToNrql` utility converts the [timeRange](https://developer.newrelic.com/components/platform-state-context) provided by the New Relic platform into a NRQL compliant time clause.
 
 For instance, a timeRange structured like this:
 
