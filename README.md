@@ -16,7 +16,7 @@ npm install --save @newrelic/nr-labs-components
 
 ### [MultiSelect](src/components/multi-select)
 
-### [HelpModal](src/components/HelpModal)
+### [HelpModal](src/components/help-modal)
 A modal component that allows for simple inclusion of support and documentation links within a New Relic app.
 
 ### [Messages](src/components/Messages)
