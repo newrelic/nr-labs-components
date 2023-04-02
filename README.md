@@ -4,7 +4,7 @@
 
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr-labs-components?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr-labs-components/badge.svg)](https://snyk.io/test/github/newrelic/nr-labs-components)
 
-A library of React components created by New Relic's [Labs-Viz team](https://github.com/orgs/newrelic/teams/labs-viz), primarily for use in [apps built for the New Relic One platform](https://developer.newrelic.com/build-apps/).
+A library of React components and helpful utilities created by New Relic's [Labs-Viz team](https://github.com/orgs/newrelic/teams/labs-viz), primarily for use in [apps built for the New Relic One platform](https://developer.newrelic.com/build-apps/).
 
 ## Installation
 
@@ -17,10 +17,20 @@ npm install --save @newrelic/nr-labs-components
 ### [MultiSelect](src/components/multi-select)
 
 ### [HelpModal](src/components/help-modal)
+A modal component that allows for simple inclusion of support and documentation links within a New Relic app.
 
-### [Messages](src/components/messages)
+### [Messages](src/components/Messages)
+A component to support push notifications into a New Relic app.
 
 ### [EditInPlace](src/components/edit-in-place)
+
+### [SimpleBillboard](src/components/simple-billboard)
+A component that renders a metric name and value, and its up/down trend against a different time range.
+
+## Utilities
+
+### [timeRangeToNrql](src/utils/time-range-to-nrql/)
+A utility to convert the New Relic platform time range into a NRQL compliant clause.
 
 ## Open Source License
 
