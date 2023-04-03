@@ -21,7 +21,7 @@ Additionally there are 4 optional properties which allow you to format the rende
 - `prefix` - appears to the left of metric.value (i.e. prefix={'$'} )
 - `suffix` - appears to the right of metric.value and metric up/down trend
 - `className` - appended to existing className(s) - must exist in your .scss files
-- `style` - inline formatiing of the metric name and value
+- `style` - inline formatting of the metric name and value
 
 ## examples
 
