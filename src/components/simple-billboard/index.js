@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
@@ -12,76 +12,70 @@ import { Icon } from 'nr1';
  * @return {JSX Object} - RENDERING name, value, up/down trend when previousValue present
  */
 const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
-  if (metric.value) {
-    metric.value = Number(metric.value);
-  }
-  if (metric.previousValue) {
-    metric.previousValue = Number(metric.previousValue);
-  }
+  const metricValue = useMemo(
+    () => (isNaN(metric.value) ? '-' : Number(metric.value), [metric.value])
+  );
+  const metricPreviousValue = useMemo(
+    () => (
+      isNaN(metric.previousValue) ? '-' : Number(metric.previousValue),
+      [metric.previousValue]
+    )
+  );
 
-  const MetricStatus = (value) => {
-    let metricStatus = (
-      <Icon
-        type={Icon.TYPE.INTERFACE__CARET__CARET_BOTTOM__WEIGHT_BOLD}
-        color={'red'}
-      />
-    );
-    metricStatus =
-      value === 0 ? (
-        <Icon
-          type={Icon.TYPE.INTERFACE__CARET__CARET_RIGHT__WEIGHT_BOLD}
-          color={'gold'}
-        />
-      ) : (
-        metricStatus
+  const MetricStatus = useCallback(
+    (difference) => {
+      let attributes = {
+        type: Icon.TYPE.INTERFACE__CARET__CARET_BOTTOM__WEIGHT_BOLD,
+        color: 'red',
+      };
+      if (difference === 0) {
+        attributes = {
+          type: Icon.TYPE.INTERFACE__CARET__CARET_RIGHT__WEIGHT_BOLD,
+          color: 'gold',
+        };
+      } else if (difference > 0) {
+        attributes = {
+          type: Icon.TYPE.INTERFACE__CARET__CARET_TOP__WEIGHT_BOLD,
+          color: 'green',
+        };
+      }
+      return (
+        <div className="metric-status">
+          <Icon {...attributes} />
+        </div>
       );
-    metricStatus =
-      value > 0 ? (
-        <Icon
-          type={Icon.TYPE.INTERFACE__CARET__CARET_TOP__WEIGHT_BOLD}
-          color={'green'}
-        />
-      ) : (
-        metricStatus
-      );
-    return <div className="metric-status">{metricStatus}</div>;
-  };
+    },
+    [metricValue - metricPreviousValue]
+  );
 
-  const formatValue = (metric) => {
-    if (isNaN(metric.value)) return '-';
-    let decimalCount = 1;
-    let millar = 1000;
-    let million = 1000000;
-    let billion = 1000000000;
-    let trillion = 1000000000000;
-    if (!isNaN(metric.previousValue)) {
-      decimalCount = 100;
-      millar = 10;
-      million = 10000;
-      billion = 10000000;
-      trillion = 10000000000;
-    }
+  const formatValue = useMemo(() => {
+    if (isNaN(metricValue)) return '-';
+    const thousand = 1000;
+    const million = 1000000;
+    const billion = 1000000000;
+    const trillion = 1000000000000;
+    const decimalFactor = !isNaN(metricPreviousValue) ? 100 : 1;
 
-    if (metric.value > trillion)
-      return `${Math.round(metric.value / trillion) / decimalCount} t`;
-    else if (metric.value > billion)
-      return `${Math.round(metric.value / billion) / decimalCount} b`;
-    else if (metric.value > million)
-      return `${Math.round(metric.value / million) / decimalCount} m`;
-    else if (metric.value > millar)
-      return `${Math.round(metric.value / millar) / decimalCount} k`;
-    else return `${Math.round(metric.value * decimalCount) / decimalCount}`;
-  };
+    const round = (value) =>
+      Math.round((value + Number.EPSILON) * decimalFactor) / decimalFactor;
 
-  const renderMetric = (metric) => {
-    if (!isNaN(metric.value)) {
+    if (metricValue > trillion) return `${round(metricValue / trillion)} t`;
+    else if (metricValue > billion) return `${round(metricValue / billion)} b`;
+    else if (metricValue > million) return `${round(metricValue / million)} m`;
+    else if (metricValue > thousand)
+      return `${round(metricValue / thousand)} k`;
+    else return `${round(metricValue)}`;
+  }, [metric]);
+
+  const renderMetric = () => {
+    if (!isNaN(metricValue)) {
       return (
         <div className="metric">
           {!prefix ? '' : prefix}
-          {formatValue(metric)}
+          {formatValue}
           {!suffix ? '' : ` ${suffix}`}
-          {!isNaN(metric.previousValue) ? (
-            <span>{MetricStatus(metric.value - metric.previousValue)}</span>
+          {!isNaN(metricPreviousValue) ? (
+            <span>{MetricStatus(metricValue - metricPreviousValue)}</span>
           ) : (
             ''
           )}
@@ -89,26 +83,28 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
       );
     }
   };
-  /* eslint-disable prettier/prettier */
   return (
     <div>
       <div className="metric-content">
         <div
-          className={`metric-content--colorblack metric-content--size1_6em metric-content--weight900 ${!className ? '' : className}`}
-          style={!style ? {emptyStyle: ' '} : style}
+          className={`metric-content--colorblack metric-content--size1_2em metric-content--weight900 ${
+            className || ''
+          }`}
+          style={style || {}}
         >
-          {renderMetric(metric)}
+          {renderMetric()}
         </div>
         <div
-          className={`metric-content--colorblack metric-content--size1_6em ${!className ? '' : className}`}
-          style={!style ? {emptyStyle: ' '} : style}
+          className={`metric-content--colorblack metric-content--size1_2em ${
+            className || ''
+          }`}
+          style={style || {}}
         >
           {metric.name}
         </div>
       </div>
     </div>
   );
-  /* eslint-enable prettier/prettier */
 };
 
 SimpleBillboard.propTypes = {
