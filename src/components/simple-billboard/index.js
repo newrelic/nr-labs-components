@@ -13,16 +13,19 @@ import { Icon } from 'nr1';
  */
 const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
   const metricValue = useMemo(
-    () => (isNaN(metric.value) ? '-' : Number(metric.value), [metric.value])
+    () => (isNaN(metric.value) ? '-' : Number(metric.value)),
+    [metric.value]
   );
   const metricPreviousValue = useMemo(
-    () => (
-      isNaN(metric.previousValue) ? '-' : Number(metric.previousValue),
-      [metric.previousValue]
-    )
+    () => (isNaN(metric.previousValue) ? '-' : Number(metric.previousValue)),
+    [metric.previousValue]
+  );
+  const difference = useMemo(
+    () => metricValue - metricPreviousValue,
+    [metricValue, metricPreviousValue]
   );
 
-  const MetricStatus = useCallback(
+  const metricStatus = useCallback(
     (difference) => {
       let attributes = {
         type: Icon.TYPE.INTERFACE__CARET__CARET_BOTTOM__WEIGHT_BOLD,
@@ -45,16 +48,16 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
         </div>
       );
     },
-    [metricValue - metricPreviousValue]
+    [difference]
   );
 
-  const formatValue = useMemo(() => {
-    if (isNaN(metricValue)) return '-';
+  const formattedValue = useMemo(() => {
+    if (metricValue === '-') return '-';
     const thousand = 1000;
     const million = 1000000;
     const billion = 1000000000;
     const trillion = 1000000000000;
-    const decimalFactor = !isNaN(metricPreviousValue) ? 100 : 1;
+    const decimalFactor = metricPreviousValue === '-' ? 1 : 100;
 
     const round = (value) =>
       Math.round((value + Number.EPSILON) * decimalFactor) / decimalFactor;
@@ -65,17 +68,17 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
     else if (metricValue > thousand)
       return `${round(metricValue / thousand)} k`;
     else return `${round(metricValue)}`;
-  }, [metric]);
+  }, [metricValue, metricPreviousValue]);
 
   const renderMetric = () => {
-    if (!isNaN(metricValue)) {
+    if (metricValue !== '-') {
       return (
         <div className="metric">
           {!prefix ? '' : prefix}
-          {formatValue}
+          {formattedValue}
           {!suffix ? '' : ` ${suffix}`}
-          {!isNaN(metricPreviousValue) ? (
-            <span>{MetricStatus(metricValue - metricPreviousValue)}</span>
+          {metricPreviousValue !== '-' ? (
+            <span>{metricStatus(difference)}</span>
           ) : (
             ''
           )}
@@ -83,6 +86,7 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
       );
     }
   };
+
   return (
     <div>
       <div className="metric-content">
