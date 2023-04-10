@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
@@ -25,32 +25,6 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
     [metricValue, metricPreviousValue]
   );
 
-  const metricStatus = useCallback(
-    (difference) => {
-      let attributes = {
-        type: Icon.TYPE.INTERFACE__CARET__CARET_BOTTOM__WEIGHT_BOLD,
-        color: 'red',
-      };
-      if (difference === 0) {
-        attributes = {
-          type: Icon.TYPE.INTERFACE__CARET__CARET_RIGHT__WEIGHT_BOLD,
-          color: 'gold',
-        };
-      } else if (difference > 0) {
-        attributes = {
-          type: Icon.TYPE.INTERFACE__CARET__CARET_TOP__WEIGHT_BOLD,
-          color: 'green',
-        };
-      }
-      return (
-        <div className="metric-status">
-          <Icon {...attributes} />
-        </div>
-      );
-    },
-    [difference]
-  );
-
   const formattedValue = useMemo(() => {
     if (metricValue === '-') return '-';
     const thousand = 1000;
@@ -69,6 +43,27 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
       return `${round(metricValue / thousand)} k`;
     else return `${round(metricValue)}`;
   }, [metricValue, metricPreviousValue]);
+
+  const metricStatus = (difference) => {
+    if (difference === 0) return;
+    let attributes;
+    if (difference > 0) {
+      attributes = {
+        type: Icon.TYPE.INTERFACE__CARET__CARET_TOP__WEIGHT_BOLD,
+        color: 'green',
+      };
+    } else {
+      attributes = {
+        type: Icon.TYPE.INTERFACE__CARET__CARET_BOTTOM__WEIGHT_BOLD,
+        color: 'red',
+      };
+    }
+    return (
+      <div className="metric-status">
+        <Icon {...attributes} />
+      </div>
+    );
+  };
 
   const renderMetric = () => {
     if (metricValue !== '-') {
