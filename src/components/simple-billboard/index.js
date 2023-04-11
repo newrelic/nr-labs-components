@@ -44,43 +44,24 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
     else return `${round(metricValue)}`;
   }, [metricValue, metricPreviousValue]);
 
-  const metricStatus = (difference) => {
-    if (difference === 0) return;
-    let attributes;
-    if (difference > 0) {
-      attributes = {
-        type: Icon.TYPE.INTERFACE__CARET__CARET_TOP__WEIGHT_BOLD,
-        color: 'green',
-      };
-    } else {
-      attributes = {
-        type: Icon.TYPE.INTERFACE__CARET__CARET_BOTTOM__WEIGHT_BOLD,
-        color: 'red',
-      };
-    }
+  const changeStatus = useMemo(() => {
+    if (difference === 0 || isNaN(difference)) return null;
+    const attributes =
+      difference > 0
+        ? {
+            type: Icon.TYPE.INTERFACE__CARET__CARET_TOP__WEIGHT_BOLD,
+            color: 'green',
+          }
+        : {
+            type: Icon.TYPE.INTERFACE__CARET__CARET_BOTTOM__WEIGHT_BOLD,
+            color: 'red',
+          };
     return (
       <div className="metric-status">
         <Icon {...attributes} />
       </div>
     );
-  };
-
-  const renderMetric = () => {
-    if (metricValue !== '-') {
-      return (
-        <div className="metric">
-          {!prefix ? '' : prefix}
-          {formattedValue}
-          {!suffix ? '' : ` ${suffix}`}
-          {metricPreviousValue !== '-' ? (
-            <span>{metricStatus(difference)}</span>
-          ) : (
-            ''
-          )}
-        </div>
-      );
-    }
-  };
+  }, [difference]);
 
   return (
     <div>
@@ -91,7 +72,10 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
           }`}
           style={style || {}}
         >
-          {renderMetric()}
+          <div className="metric">
+            {`${prefix || ''} ${formattedValue} ${suffix || ''}`}
+            <span>{changeStatus}</span>
+          </div>
         </div>
         <div
           className={`metric-content--colorblack metric-content--size1_2em ${
