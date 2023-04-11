@@ -21,7 +21,10 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
     [metric.previousValue]
   );
   const difference = useMemo(
-    () => metricValue - metricPreviousValue,
+    () =>
+      typeof metricValue === 'number' && typeof metricPreviousValue === 'number'
+        ? metricValue - metricPreviousValue
+        : 0,
     [metricValue, metricPreviousValue]
   );
 
@@ -45,7 +48,7 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
   }, [metricValue, metricPreviousValue]);
 
   const changeStatus = useMemo(() => {
-    if (difference === 0 || isNaN(difference)) return null;
+    if (difference === 0) return null;
     const attributes =
       difference > 0
         ? {
