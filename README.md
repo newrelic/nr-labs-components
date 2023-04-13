@@ -23,9 +23,13 @@ A modal component that allows for simple inclusion of support and documentation 
 A component to support push notifications into a New Relic app.
 
 ### [EditInPlace](src/components/edit-in-place)
+Enable editing of the text content of HTML tags in the browser.
 
 ### [SimpleBillboard](src/components/simple-billboard)
 A component that renders a metric's name and value, and its up/down trend against a different time range.
+
+### [NrqlEditor](src/components/nrql-editor)
+A NRQL editor in the browser.
 
 ## Utilities
 
