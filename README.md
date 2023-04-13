@@ -24,6 +24,9 @@ A component to support push notifications into a New Relic app.
 
 ### [EditInPlace](src/components/edit-in-place)
 
+### [SimpleBillboard](src/components/simple-billboard)
+A component that renders a metric's name and value, and its up/down trend against a different time range.
+
 ## Utilities
 
 ### [timeRangeToNrql](src/utils/time-range-to-nrql/)
