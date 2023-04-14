@@ -12,6 +12,20 @@ A library of React components and helpful utilities created by New Relic's [Labs
 npm install --save @newrelic/nr-labs-components
 ```
 
+## Usage
+
+Import `styles.css` in your stylesheet.
+
+```css
+@import '~@newrelic/nr-labs-components/dist/styles.css';
+```
+
+Import components/utilities in you javascript.
+
+```javascript
+import { COMPONENT_OR_UTILITY, COMPONENT_OR_UTILITY, ... } from '@newrelic/nr-labs-components';
+```
+
 ## Components
 
 ### [MultiSelect](src/components/multi-select)

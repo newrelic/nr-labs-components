@@ -12,7 +12,7 @@ function getPlugins() {
   return [
     external(),
     postcss({
-      extract: false,
+      extract: 'styles.css',
       modules: true,
       use: ['sass']
     }),
