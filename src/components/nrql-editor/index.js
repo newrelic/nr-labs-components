@@ -75,6 +75,9 @@ const NrqlEditor = ({
         <div className={styles.editor}>
           <textarea
             className={`u-unstyledInput ${styles.entry}`}
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck="false"
             value={nrql}
             onChange={({ target: { value } = {} } = {}) => setNrql(value)}
             onScroll={scrollHandler}
