@@ -100,12 +100,6 @@ $default-line-height: 19px;
     color: $normal;
     font: $default-font-size monospace;
     padding-bottom: $default-line-height;
-
-    .keyword { color: $keyword; }
-    .function { color: $function; }
-    .string { color: $string; }
-    .numeric { color: $numeric; }
-    .operator { color: $operator; }
   }
 }
 

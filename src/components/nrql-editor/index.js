@@ -7,10 +7,21 @@ import patterns from './patterns';
 
 import styles from './index.scss';
 
+const NRQL_STYLES = {
+  keyword: 'color: #AA1BC8;',
+  function: 'color: #3B79B8;',
+  string: 'color: #4F8400;',
+  numeric: 'color: #AB6400;',
+  operator: 'color: #3D808A;',
+};
+
 const lexer = (nrql) =>
   patterns.reduce(
     (acc, { name, regex } = {}) =>
-      acc.replace(regex, (match) => `<span class="${name}">${match}</span>`),
+      acc.replace(
+        regex,
+        (match) => `<span style="${NRQL_STYLES[name]}">${match}</span>`
+      ),
     nrql
   );
 
