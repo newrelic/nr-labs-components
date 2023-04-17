@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
 
+import styles from './styles.scss';
+
 /**
  * @param {Object} metric - metric name, value, previousCalue
  * @param {string} prefix - prefix for metric.value (i.e. '$')
@@ -60,7 +62,7 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
             color: 'red',
           };
     return (
-      <div className="metric-status">
+      <div className={styles['metric-status']}>
         <Icon {...attributes} />
       </div>
     );
@@ -68,22 +70,22 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
 
   return (
     <div>
-      <div className="metric-content">
+      <div className={styles['metric-content']}>
         <div
-          className={`metric-content--colorblack metric-content--size1_2em metric-content--weight900 ${
-            className || ''
-          }`}
+          className={`${styles['metric-content--colorblack']} ${
+            styles['metric-content--size1_2em']
+          } ${styles['metric-content--weight900']} ${className || ''}`}
           style={style || {}}
         >
-          <div className="metric">
+          <div className={styles['metric']}>
             {`${prefix || ''} ${formattedValue} ${suffix || ''}`}
             <span>{changeStatus}</span>
           </div>
         </div>
         <div
-          className={`metric-content--colorblack metric-content--size1_2em ${
-            className || ''
-          }`}
+          className={`${styles['metric-content--colorblack']} ${
+            styles['metric-content--size1_2em']
+          } ${className || ''}`}
           style={style || {}}
         >
           {metric.name}
