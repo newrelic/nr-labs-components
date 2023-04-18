@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- SimpleBillboard component by [@shahramk](https://github.com/shahramk)
+
+
+## [1.10.1] - 2023-04-17
+
+### Added
+
+- SimpleBillboard component by [@shahramk](https://github.com/shahramk)
+
+## [1.10.0] - 2023-04-14
+
+### Added
+
+- NrqlEditor component by [@amit-y](https://github.com/amit-y)
+
+## [1.9.0] - 2023-04-14
+
+### Added
+
+- NrqlEditor component by [@amit-y](https://github.com/amit-y)
+
 ### Added
 
 - NrqlEditor component by [@amit-y](https://github.com/amit-y).
