@@ -7,9 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.2] - 2023-04-20
+
+### Fixed
+
+- Gets correct window object when using EditInPlace in an iframe 
+
+## [1.10.1] - 2023-04-17
+
+### Changed
+
+- Styling changes for SimpleBillboard 
+
+## [1.10.0] - 2023-04-14
+
 ### Added
 
-- NrqlEditor component by [@amit-y](https://github.com/amit-y).
+- NrqlEditor component by [@amit-y](https://github.com/amit-y)
+
+## [1.9.0] - 2023-04-14
+
+### Added
+
+- Extract all CSS to a file 
 
 ## [1.8.0] - 2023-04-13
 
