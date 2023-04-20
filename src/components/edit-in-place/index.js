@@ -28,6 +28,7 @@ const EditInPlace = forwardRef(
     const editableRef = useRef();
     const caretPosition = useRef();
     const [text, setText] = useState('');
+    const [win, setWin] = useState();
 
     // expose focus method
     useImperativeHandle(
@@ -43,6 +44,12 @@ const EditInPlace = forwardRef(
       }),
       []
     );
+
+    // get window object (needed for iframes)
+    useEffect(() => {
+      if (editableRef.current)
+        setWin(editableRef.current.ownerDocument?.defaultView);
+    }, [editableRef.current]);
 
     // set text from value prop
     useEffect(() => setText(value), [value]);
@@ -86,9 +93,9 @@ const EditInPlace = forwardRef(
       evt.preventDefault();
       // get text only from clipboard
       const textFromClipboard = (
-        evt.clipboardData || window.clipboardData
+        evt.clipboardData || win.clipboardData
       ).getData('text');
-      const selection = window.getSelection();
+      const selection = win.getSelection();
       if (!textFromClipboard || !selection.rangeCount) return;
       selection.deleteFromDocument();
       selection
@@ -103,7 +110,7 @@ const EditInPlace = forwardRef(
 
     // get caret position
     const getCaretPosition = useCallback((elem) => {
-      const selection = window.getSelection();
+      const selection = win.getSelection();
       if (!selection?.rangeCount) return 0;
 
       const range = selection.getRangeAt(0);
@@ -118,7 +125,7 @@ const EditInPlace = forwardRef(
     // set caret position
     const setCaretPosition = useCallback((elem, offset = 0) => {
       if (!elem?.childNodes?.length) return;
-      let selection = window.getSelection();
+      let selection = win.getSelection();
       let range = document.createRange();
       range.setStart(elem.childNodes[0], offset);
       range.collapse(true);
