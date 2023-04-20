@@ -7,14 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- SimpleBillboard component by [@shahramk](https://github.com/shahramk)
+## [1.10.2] - 2023-04-20
 
+### Fixed
+
+- Gets correct window object when using EditInPlace in an iframe 
 
 ## [1.10.1] - 2023-04-17
 
-### Added
+### Changed
 
-- SimpleBillboard component by [@shahramk](https://github.com/shahramk)
+- Styling changes for SimpleBillboard 
 
 ## [1.10.0] - 2023-04-14
 
@@ -26,11 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- NrqlEditor component by [@amit-y](https://github.com/amit-y)
-
-### Added
-
-- NrqlEditor component by [@amit-y](https://github.com/amit-y).
+- Extract all CSS to a file 
 
 ## [1.8.0] - 2023-04-13
 
