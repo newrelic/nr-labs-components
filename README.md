@@ -45,6 +45,9 @@ A component that renders a metric's name and value, and its up/down trend agains
 ### [NrqlEditor](src/components/nrql-editor)
 A NRQL editor in the browser.
 
+### [StatusIcon](src/components/status-icon)
+Displays a status icon.
+
 ## Utilities
 
 ### [timeRangeToNrql](src/utils/time-range-to-nrql/)
