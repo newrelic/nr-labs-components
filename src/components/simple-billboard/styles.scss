@@ -10,11 +10,9 @@
 
 .metric-content {
   line-height: 25px;
-  margin: 10px 10px 0 10px;
-  align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.2em;
 
   &--colorgrey {
     color: #bdbdbd;
@@ -24,11 +22,11 @@
     color: #333333;
   }
 
-  &--size1_2em {
-    font-size: 1.2em;
+  &--size1_4em {
+    font-size: 1.4em;
   }
 
-  &--weight900 {
-    font-weight: 900;
+  &--weight700 {
+    font-weight: 700;
   }
 }

@@ -73,8 +73,8 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
       <div className={styles['metric-content']}>
         <div
           className={`${styles['metric-content--colorblack']} ${
-            styles['metric-content--size1_2em']
-          } ${styles['metric-content--weight900']} ${className || ''}`}
+            styles['metric-content--size1_4em']
+          } ${styles['metric-content--weight700']} ${className || ''}`}
           style={style || {}}
         >
           <div className={styles['metric']}>
@@ -84,7 +84,7 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
         </div>
         <div
           className={`${styles['metric-content--colorblack']} ${
-            styles['metric-content--size1_2em']
+            styles['metric-content--size1_4em']
           } ${className || ''}`}
           style={style || {}}
         >
