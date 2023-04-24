@@ -21,6 +21,11 @@ function MyComponent() {
 ### Props
 
 - status (enum): One of possible statuses included in the `STATUSES` enum
+- color (string): A CSS color string (see example below)
+
+```jsx
+<StatusIcon color="#FF00999" />
+```
 
 ### Statuses
 
@@ -30,3 +35,4 @@ Possible statuses in the `STATUSES` enum are:
 - `StatusIcon.STATUSES.WARNING`
 - `StatusIcon.STATUSES.CRITICAL`
 - `StatusIcon.STATUSES.UNKNOWN`
+- `StatusIcon.STATUSES.BLANK`
