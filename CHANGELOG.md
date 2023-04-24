@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `BLANK` option to `STATUSES` enum in StatusIcon
+- StatusIcon now accepts optional `color` prop 
+
 ## [1.11.0] - 2023-04-21
 
 ### Added
