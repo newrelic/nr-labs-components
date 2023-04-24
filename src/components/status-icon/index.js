@@ -8,14 +8,19 @@ const STATUSES = {
   WARNING: 'warning',
   CRITICAL: 'critical',
   UNKNOWN: 'unknown',
+  BLANK: 'blank',
 };
 
-const StatusIcon = ({ status = STATUSES.UNKNOWN }) => (
-  <span className={`${styles['status-icon']} ${styles[status]}`} />
+const StatusIcon = ({ status = STATUSES.UNKNOWN, color: backgroundColor }) => (
+  <span
+    className={`${styles['status-icon']} ${styles[status]}`}
+    style={{ backgroundColor }}
+  />
 );
 
 StatusIcon.propTypes = {
   status: PropTypes.oneOf(Object.values(STATUSES)),
+  color: PropTypes.string,
 };
 
 StatusIcon.STATUSES = STATUSES;
