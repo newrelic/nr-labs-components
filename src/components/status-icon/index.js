@@ -8,6 +8,7 @@ const STATUSES = {
   WARNING: 'warning',
   CRITICAL: 'critical',
   UNKNOWN: 'unknown',
+  BLANK: 'blank',
 };
 
 const StatusIcon = ({ status = STATUSES.UNKNOWN }) => (

@@ -2,6 +2,7 @@ $success: #01A76A;
 $warning: #FFD23D;
 $critical: #F5554B;
 $unknown: #9EA5A9;
+$blank: transparent;
 
 .status-icon {
   display: inline-block;
@@ -20,5 +21,8 @@ $unknown: #9EA5A9;
   }
   &.unknown {
     background-color: $unknown;
+  }
+  &.blank {
+    background-color: $blank;
   }
 }
