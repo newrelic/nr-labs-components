@@ -4,7 +4,7 @@
 
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr-labs-components?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr-labs-components/badge.svg)](https://snyk.io/test/github/newrelic/nr-labs-components)
 
-A library of React components and helpful utilities created by New Relic's [Labs-Viz team](https://github.com/orgs/newrelic/teams/labs-viz), primarily for use in [apps built for the New Relic One platform](https://developer.newrelic.com/build-apps/).
+A library of React components and helpful utilities created by New Relic's Labs-Viz team, primarily for use in [apps built for the New Relic One platform](https://developer.newrelic.com/build-apps/).
 
 ## Installation
 
