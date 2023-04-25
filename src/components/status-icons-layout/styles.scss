@@ -1,0 +1,16 @@
+.status-icons-wrapper {
+  display: flex;
+  margin-bottom: 3px;
+}
+
+.status-icons-container {
+  font-size: 0;
+
+  &::before {
+    content: "";
+    width: 6px;
+    float: left;
+    height: 120%;
+    shape-outside: repeating-linear-gradient(#0000 0 18px, #000 0 20px);
+  }
+}
