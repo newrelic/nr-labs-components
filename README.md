@@ -48,6 +48,9 @@ A NRQL editor in the browser.
 ### [StatusIcon](src/components/status-icon)
 Displays a status icon.
 
+### [StatusIconsLayout](src/components/status-icons-layout)
+A layout component for `StatusIcon`
+
 ## Utilities
 
 ### [timeRangeToNrql](src/utils/time-range-to-nrql/)
