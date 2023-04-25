@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './index.scss';
+import styles from './styles.scss';
 
 const STATUSES = {
   SUCCESS: 'success',
