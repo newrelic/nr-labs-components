@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.0] - 2023-04-25
+
+### Added
+
+- Props `style`, `title`, `onClick` to StatusIcon 
+
 ## [1.12.0] - 2023-04-24
 
 ### Added
