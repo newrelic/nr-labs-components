@@ -21,11 +21,15 @@ function MyComponent() {
 ### Props
 
 - status (enum): One of possible statuses included in the `STATUSES` enum
+- title (string): Text to display as a tooltip
+- style (object): An object containing custom styles to apply to the component
 - color (string): A CSS color string (see example below)
 
 ```jsx
 <StatusIcon color="#FF00999" />
 ```
+
+- onClick (function): A function that is called when the user clicks the icon
 
 ### Statuses
 
