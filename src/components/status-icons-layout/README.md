@@ -1,4 +1,4 @@
-# Status Icon
+# Status Icons Layout
 
 A layout component to display multiple [`StatusIcon`](../status-icon)s.
 
