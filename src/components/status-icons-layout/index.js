@@ -22,7 +22,7 @@ const StatusIconsLayout = ({ statuses }) => {
         ))
       );
     }
-  }, statuses);
+  }, [statuses]);
 
   useLayoutEffect(() => {
     const { width } = wrapperRef.current.getBoundingClientRect();
