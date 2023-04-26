@@ -1,27 +1,30 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { Icon } from 'nr1';
+import { Tooltip } from 'nr1';
 
 import styles from './styles.scss';
 
 /**
- * @param {Object} metric - metric name, value, previousCalue
- * @param {string} prefix - prefix for metric.value (i.e. '$')
- * @param {string} suffix - suffix for metric.value (i.e. users)
- * @param {string} className -  SCSS class name - gets added to existing JSX classes
- * @param {Object} style - SCSS style - gets added to JSX - overwrites existing/duplicate CSS properties
+ * @param {Object} metric - metric value, previousValue, optional: prefix, suffix, className, style
+ * @param {Object} statusTrend - optional: className, style
+ * @param {Object} title - metric name, optional: className, style
  * @return {JSX Object} - RENDERING name, value, up/down trend when previousValue present
  */
-const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
+const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
   const metricValue = useMemo(
     () => (isNaN(metric.value) ? '-' : Number(metric.value)),
     [metric.value]
   );
+
   const metricPreviousValue = useMemo(
-    () => (isNaN(metric.previousValue) ? '-' : Number(metric.previousValue)),
+    () =>
+      isNaN(metric.previousValue) || metric.previousValue === ''
+        ? '-'
+        : Number(metric.previousValue),
     [metric.previousValue]
   );
+
   const difference = useMemo(
     () =>
       typeof metricValue === 'number' && typeof metricPreviousValue === 'number'
@@ -36,10 +39,8 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
     const million = 1000000;
     const billion = 1000000000;
     const trillion = 1000000000000;
-    const decimalFactor = metricPreviousValue === '-' ? 1 : 100;
 
-    const round = (value) =>
-      Math.round((value + Number.EPSILON) * decimalFactor) / decimalFactor;
+    const round = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
 
     if (metricValue > trillion) return `${round(metricValue / trillion)} t`;
     else if (metricValue > billion) return `${round(metricValue / billion)} b`;
@@ -51,56 +52,82 @@ const SimpleBillboard = ({ metric, prefix, suffix, className, style }) => {
 
   const changeStatus = useMemo(() => {
     if (difference === 0) return null;
-    const attributes =
+    const icons = {
+      uparrow: <polygon points="8,0 0,16 16,16" />,
+      downarrow: <polygon points="0,0 16,0 8,16" />,
+    };
+    const icon =
       difference > 0
         ? {
-            type: Icon.TYPE.INTERFACE__CARET__CARET_TOP__WEIGHT_BOLD,
-            color: 'green',
+            type: 'uparrow',
+            fill: '#02865B',
           }
         : {
-            type: Icon.TYPE.INTERFACE__CARET__CARET_BOTTOM__WEIGHT_BOLD,
-            color: 'red',
+            type: 'downarrow',
+            fill: '#DF2D24',
           };
     return (
-      <div className={styles['metric-status']}>
-        <Icon {...attributes} />
-      </div>
+      <svg
+        className={`${styles['metric-status']} ${statusTrend.className || ''}`}
+        style={{ ...statusTrend.style } || {}}
+        viewBox="0 0 16 16"
+        fill={icon.fill}
+        xmlns="http://www.w3.org/2000/svg"
+        focusable="false"
+        role="img"
+      >
+        <title>{`${icon.type} icon`}</title>
+        {icons[icon.type]}
+      </svg>
     );
   }, [difference]);
 
   return (
     <div>
-      <div className={styles['metric-content']}>
-        <div
-          className={`${styles['metric-content--colorblack']} ${
-            styles['metric-content--size1_4em']
-          } ${styles['metric-content--weight700']} ${className || ''}`}
-          style={style || {}}
-        >
-          <div className={styles['metric']}>
-            {`${prefix || ''} ${formattedValue} ${suffix || ''}`}
-            <span>{changeStatus}</span>
-          </div>
+      <div
+        className={`${styles['metric-content']} ${styles['metric-value']} ${
+          metric.className || ''
+        }`}
+        style={metric.style || {}}
+      >
+        <div>
+          {`${metric.prefix || ''} ${formattedValue} ${metric.suffix || ''}`}
+          <span>{changeStatus}</span>
         </div>
-        <div
-          className={`${styles['metric-content--colorblack']} ${
-            styles['metric-content--size1_4em']
-          } ${className || ''}`}
-          style={style || {}}
-        >
-          {metric.name}
-        </div>
+      </div>
+
+      <div className={`${styles['metric-content']} ${styles['metric-name']}`}>
+        <Tooltip text={title.name}>
+          <span
+            className={`${styles['ellipsis']} ${title.className || ''}`}
+            style={{ ...title.style } || {}}
+          >
+            {title.name}
+          </span>
+        </Tooltip>
       </div>
     </div>
   );
 };
 
 SimpleBillboard.propTypes = {
-  metric: PropTypes.object,
-  prefix: PropTypes.string,
-  suffix: PropTypes.string,
-  className: PropTypes.string,
-  style: PropTypes.object,
+  metric: PropTypes.shape({
+    value: PropTypes.number,
+    previousValue: PropTypes.number,
+    prefix: PropTypes.string,
+    suffix: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object,
+  }),
+  statusTrend: PropTypes.shape({
+    className: PropTypes.string,
+    style: PropTypes.object,
+  }),
+  title: PropTypes.shape({
+    name: PropTypes.string,
+    style: PropTypes.object,
+    className: PropTypes.string,
+  }),
 };
 
 export default SimpleBillboard;
