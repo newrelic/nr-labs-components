@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.14.1] - 2023-04-27
+
+### Changed
+
+- SimpleBillboard component
+  - [trend icons](https://github.com/newrelic/nr-labs-components/commit/fc4bd01e441c4380368ab8f67c9c74c6452ed0f6)
+  - [styles](https://github.com/newrelic/nr-labs-components/commit/369df4259b87dd101f88796f1d82f1b6cdb0ce18)
+  - [update readme](https://github.com/newrelic/nr-labs-components/commit/4f37b9c5eec82f8a8d5179657896dbaa7993b316)
+
 ## [1.14.0] - 2023-04-25
 
 ### Added
