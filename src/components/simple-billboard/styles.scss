@@ -1,37 +1,25 @@
-.metric-content {
-  display: flex;
-  flex-direction: column;
+.metric-color {
   color: #293338;
-  line-height: 20px;
-  gap: 0.2em;
+}
 
+.metric-value {
+  font-size: 1rem;
+  font-weight: 600;
+}
 
-  &.metric-value {
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  &.metric-name {
-    font-size: 0.875rem;
-    font-weight: 400;
-    width: 100px;
-  }
-
+.metric-name {
+  font-size: 0.875rem;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .metric-status {
   display: inline-block;
   width: 1rem;
   height: 1rem;
-  line-height: 1;
   font-size: 1rem;
   vertical-align: middle;
-  padding-left: 3px;
-}
-
-.ellipsis {
-  width: 100px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding-left: 0.1875rem;
 }
