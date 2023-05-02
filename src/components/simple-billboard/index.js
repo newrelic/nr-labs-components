@@ -83,7 +83,7 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
   }, [difference]);
 
   return (
-    <>
+    <div  className="simple-billboard">
       <div
         className={`${styles['metric-color']} ${styles['metric-value']} ${
           metric.className || ''
@@ -104,7 +104,7 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
           {title.name}
         </div>
       </Tooltip>
-    </>
+    </div>
   );
 };
 
