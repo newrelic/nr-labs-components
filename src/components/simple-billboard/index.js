@@ -83,29 +83,27 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
   }, [difference]);
 
   return (
-    <div>
+    <div  className="simple-billboard">
       <div
-        className={`${styles['metric-content']} ${styles['metric-value']} ${
+        className={`${styles['metric-color']} ${styles['metric-value']} ${
           metric.className || ''
         }`}
         style={metric.style || {}}
       >
-        <div>
-          {`${metric.prefix || ''} ${formattedValue} ${metric.suffix || ''}`}
-          <span>{changeStatus}</span>
-        </div>
+        {`${metric.prefix || ''} ${formattedValue} ${metric.suffix || ''}`}
+        <span>{changeStatus}</span>
       </div>
 
-      <div className={`${styles['metric-content']} ${styles['metric-name']}`}>
-        <Tooltip text={title.name}>
-          <span
-            className={`${styles['ellipsis']} ${title.className || ''}`}
-            style={{ ...title.style } || {}}
-          >
-            {title.name}
-          </span>
-        </Tooltip>
-      </div>
+      <Tooltip text={title.name}>
+        <div
+          className={`${styles['metric-color']} ${styles['metric-name']} ${
+            title.className || ''
+          }`}
+          style={{ ...title.style } || {}}
+        >
+          {title.name}
+        </div>
+      </Tooltip>
     </div>
   );
 };
