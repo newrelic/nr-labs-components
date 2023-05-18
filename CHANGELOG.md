@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.14.3] - 2023-05-18
+
 ## [1.14.2] - 2023-05-02
 
 ### Changed
@@ -32,14 +34,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Props `style`, `title`, `onClick` to StatusIcon 
+- Props `style`, `title`, `onClick` to StatusIcon
 
 ## [1.12.0] - 2023-04-24
 
 ### Added
 
 - `BLANK` option to `STATUSES` enum in StatusIcon
-- StatusIcon now accepts optional `color` prop 
+- StatusIcon now accepts optional `color` prop
 
 ## [1.11.0] - 2023-04-21
 
@@ -51,13 +53,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Gets correct window object when using EditInPlace in an iframe 
+- Gets correct window object when using EditInPlace in an iframe
 
 ## [1.10.1] - 2023-04-17
 
 ### Changed
 
-- Styling changes for SimpleBillboard 
+- Styling changes for SimpleBillboard
 
 ## [1.10.0] - 2023-04-14
 
@@ -69,7 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Extract all CSS to a file 
+- Extract all CSS to a file
 
 ## [1.8.0] - 2023-04-13
 
@@ -79,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.7.0] - 2023-03-31
 
-### Added 
+### Added
 
 - timeRangeToNrql by [@aso1124](https://github.com/aso1124)
 

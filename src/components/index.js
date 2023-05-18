@@ -6,3 +6,4 @@ export { default as SimpleBillboard } from './simple-billboard';
 export { default as NrqlEditor } from './nrql-editor';
 export { default as StatusIcon } from './status-icon';
 export { default as StatusIconsLayout } from './status-icons-layout';
+export { default as ProgressBar } from './progress-bar';
