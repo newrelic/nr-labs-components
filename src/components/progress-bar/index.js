@@ -67,7 +67,7 @@ const ProgressBar = ({
   );
 };
 
-ProgressBar.STATUSES = { ...STATUSES };
+ProgressBar.STATUSES = STATUSES;
 ProgressBar.propTypes = {
   max: PropTypes.number,
   value: PropTypes.number,
