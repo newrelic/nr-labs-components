@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.14.3] - 2023-05-18
+## [1.15.0] - 2023-05-18
+
+### Added
+
+- Progress Bar component by [@aso1124](https://github.com/aso1124)
 
 ## [1.14.2] - 2023-05-02
 
