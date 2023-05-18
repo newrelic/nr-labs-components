@@ -25,10 +25,12 @@ To use the component, import it into your project and provide the necessary prop
 ```
 
 - height (string): A CSS height string that determines the height of the progress bar
-- font (object): An object containing CSS settings to change the label font styles. Accepts settings for `fontSize`, `fontWeight` and `color`.
+- fontSize (string): A CSS string to change the size of the label font.
+- fontColor (string): A CSS string to change the color of the label font.
+- fontWeight (strig): A CSS string to change the weight of the label font.
 
 ```jsx
-<ProgressBar font={{ fontSize: '14px', color: 'purple', fontWeight: '600' }} />
+<ProgressBar fontSize="14px" fontColor="purple" fontWeight="600" />
 ```
 
 - onEnd (function): For a bar that fills dynamically (e.g. a loader bar), a function that is called when the progress bar is full.
@@ -69,7 +71,7 @@ function MyComponent() {
         label="90/100"
         status={ProgressBar.STATUSES.SUCCESS}
         height="25px"
-        font={{ fontSize: '14px' }}
+        fontSize="14px"
       />
     </>
   );

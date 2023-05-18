@@ -9,29 +9,20 @@ const percentFormatter = new Intl.NumberFormat('default', {
   maximumFractionDigits: 2,
 });
 
-const getFontStyles = (font) => {
-  return (
-    font && {
-      fontSize: font?.fontSize,
-      color: font?.color,
-      fontWeight: font?.fontWeight,
-    }
-  );
-};
-
 const ProgressBar = ({
   max = 0,
   value = 0,
   status,
   onEnd,
   label,
-  font,
+  fontSize,
+  fontColor: color,
+  fontWeight,
   backgroundColor,
   barColor,
   height,
 }) => {
   const progressBar = useRef(null);
-  const fontStyles = getFontStyles(font);
 
   useEffect(() => {
     const progressPct =
@@ -60,7 +51,13 @@ const ProgressBar = ({
       >
         {label && (
           <span
-            style={{ paddingLeft: '5px', lineHeight: height, ...fontStyles }}
+            style={{
+              paddingLeft: '5px',
+              lineHeight: height,
+              fontSize,
+              color,
+              fontWeight,
+            }}
           >
             {label}
           </span>
@@ -80,11 +77,9 @@ ProgressBar.propTypes = {
   backgroundColor: PropTypes.string,
   barColor: PropTypes.string,
   height: PropTypes.string,
-  font: PropTypes.shape({
-    fontSize: PropTypes.string,
-    color: PropTypes.string,
-    fontWeight: PropTypes.string,
-  }),
+  fontSize: PropTypes.string,
+  fontColor: PropTypes.string,
+  fontWeight: PropTypes.string,
 };
 
 export default ProgressBar;
