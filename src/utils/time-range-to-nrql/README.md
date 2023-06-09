@@ -20,7 +20,7 @@ will return a NRQL clause of `SINCE 3 MINUTES AGO`
 ```jsx
 import React, { useContext } from 'react';
 import { PlatformStateContext } from 'nr1';
-import { timeRangeToNrql } from '@newrelic/nr-labs-component';
+import { timeRangeToNrql } from '@newrelic/nr-labs-components';
 
 const myNerdlet = () => {
   const platformState = useContext(PlatformStateContext)
