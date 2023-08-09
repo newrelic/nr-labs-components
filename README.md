@@ -29,6 +29,7 @@ import { COMPONENT_OR_UTILITY, COMPONENT_OR_UTILITY, ... } from '@newrelic/nr-la
 ## Components
 
 ### [MultiSelect](src/components/multi-select)
+Allows users to select multiple options from a dropdown menu.
 
 ### [HelpModal](src/components/help-modal)
 A modal component that allows for simple inclusion of support and documentation links within a New Relic app.
