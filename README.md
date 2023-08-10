@@ -54,6 +54,9 @@ A layout component for `StatusIcon`
 ### [ProgressBar](src/components/progress-bar)
 A component that renders a progress bar.
 
+### [FilterBar](src/components/filter-bar)
+Component that allows a user to filter options.
+
 ## Utilities
 
 ### [timeRangeToNrql](src/utils/time-range-to-nrql/)
