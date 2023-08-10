@@ -1,0 +1,37 @@
+.conjunction {
+  padding: 1px 4px;
+  background: rgb(231, 233, 233);
+  border-radius: 3px;
+  margin-right: 8px;
+  color: rgb(83, 94, 101);
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+
+  &.hint {
+    background: rgba(231, 233, 233, 0.5);
+    color: rgba(83, 94, 101, 0.5);
+  }
+
+  .conjunction-picker {
+    position: absolute;
+    background: #ffffff;
+    box-shadow: 0px 4px 4px 4px rgba(0, 0, 0, 0.02),
+      0px 8px 16px 8px rgba(2, 3, 3, 0.05);
+    border-radius: 4px;
+    display: flex;
+    gap: 3px;
+    padding: 5px;
+    z-index: 11;
+
+    span {
+      padding: 1px 4px;
+      background: #ffffff;
+      border-radius: 3px;
+
+      &.selected {
+        background: #e8e8e8;
+      }
+    }
+  }
+}
