@@ -34,7 +34,7 @@ Allows users to select multiple options from a dropdown menu.
 ### [HelpModal](src/components/help-modal)
 A modal component that allows for simple inclusion of support and documentation links within a New Relic app.
 
-### [Messages](src/components/Messages)
+### [Messages](src/components/messages)
 A component to support push notifications into a New Relic app.
 
 ### [EditInPlace](src/components/edit-in-place)
