@@ -13,7 +13,7 @@ For instance, a timeRange structured like this:
     }
 }
 ```
-will return a NRQL clause of `SINCE 3 MINUTES AGO`
+will return a NRQL clause of `SINCE 30 MINUTES AGO`
 
 ## example
 
