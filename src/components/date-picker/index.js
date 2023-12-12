@@ -14,6 +14,8 @@ import {
   daysOfWeek,
 } from './utils';
 
+const DAYS_OF_WEEK = daysOfWeek();
+
 import styles from './styles.scss';
 
 const DatePicker = ({ date, onChange }) => {
@@ -72,7 +74,7 @@ const DatePicker = ({ date, onChange }) => {
           >
             <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_RIGHT} />
           </div>
-          {daysOfWeek().map(({ long, short }) => (
+          {DAYS_OF_WEEK.map(({ long, short }) => (
             <div className={`${styles.cell} ${styles.day}`} key={long}>
               <abbr title={long}>{short}</abbr>
             </div>
