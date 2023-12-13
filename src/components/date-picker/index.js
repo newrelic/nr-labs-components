@@ -80,11 +80,14 @@ const DatePicker = ({ date, onChange, validFrom }) => {
             </div>
           ))}
           {Array.from({ length: firstDayOfMonth(current) }, (_, i) => (
-            <div key={i} className={`${styles.cell}`} />
+            <div
+              key={`${current.yr}${current.mo}blank${i}`}
+              className={`${styles.cell}`}
+            />
           ))}
           {Array.from({ length: lastDateInMonth(current) }, (_, i) => (
             <div
-              key={i}
+              key={`${current.yr}${current.mo}${i}`}
               className={`${styles.cell} ${styles.date} ${
                 selectedDate(i, current, date) ? styles.selected : ''
               } ${
