@@ -9,16 +9,16 @@ import {
   firstDayOfMonth,
   lastDateInMonth,
   extractDateParts,
-  afterToday,
   selectedDate,
   daysOfWeek,
+  isSelectableDate,
 } from './utils';
 
 const DAYS_OF_WEEK = daysOfWeek();
 
 import styles from './styles.scss';
 
-const DatePicker = ({ date, onChange }) => {
+const DatePicker = ({ date, onChange, validFrom }) => {
   const [opened, setOpened] = useState(false);
   const [current, setCurrent] = useState(extractDateParts(new Date()));
 
@@ -41,7 +41,7 @@ const DatePicker = ({ date, onChange }) => {
     d.getFullYear() === current.yr && d.getMonth() === current.mo;
 
   const clickHandler = (dt) => {
-    if (afterToday(current, dt + 1) || !onChange) return;
+    if (!isSelectableDate(current, dt + 1, validFrom) || !onChange) return;
     onChange(new Date(current.yr, current.mo, dt + 1));
     setOpened(false);
   };
@@ -87,7 +87,11 @@ const DatePicker = ({ date, onChange }) => {
               key={i}
               className={`${styles.cell} ${styles.date} ${
                 selectedDate(i, current, date) ? styles.selected : ''
-              } ${afterToday(current, i + 1) ? styles.disabled : ''}`}
+              } ${
+                !isSelectableDate(current, i + 1, validFrom)
+                  ? styles.disabled
+                  : ''
+              }`}
               onClick={() => clickHandler(i)}
             >
               {i + 1}
@@ -101,6 +105,7 @@ const DatePicker = ({ date, onChange }) => {
 
 DatePicker.propTypes = {
   date: PropTypes.instanceOf(Date),
+  validFrom: PropTypes.instanceOf(Date),
   onChange: PropTypes.func,
 };
 

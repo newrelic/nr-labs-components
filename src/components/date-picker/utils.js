@@ -34,6 +34,20 @@ const afterToday = (cur, d) => {
   );
 };
 
+const isSelectableDate = (cur, d, validFrom) => {
+  let isValid = true;
+  if (validFrom && validFrom instanceof Date) {
+    const validDate = new Date(
+      validFrom.getFullYear(),
+      validFrom.getMonth(),
+      validFrom.getDate()
+    );
+    const curDt = new Date(cur.yr, cur.mo, d);
+    isValid = curDt >= validDate;
+  }
+  return isValid && !afterToday(cur, d);
+};
+
 const selectedDate = (index, cur, dt) => {
   if (!dt || !(dt instanceof Date)) return false;
   return (
@@ -67,7 +81,7 @@ export {
   firstDayOfMonth,
   lastDateInMonth,
   extractDateParts,
-  afterToday,
   selectedDate,
   daysOfWeek,
+  isSelectableDate,
 };
