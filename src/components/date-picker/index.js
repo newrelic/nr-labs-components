@@ -42,7 +42,13 @@ const DatePicker = ({ date, onChange, validFrom }) => {
 
   const clickHandler = (dt) => {
     if (!isSelectableDate(current, dt + 1, validFrom) || !onChange) return;
-    onChange(new Date(current.yr, current.mo, dt + 1));
+
+    const d = date instanceof Date ? new Date(date.getTime()) : new Date();
+    d.setFullYear(current.yr);
+    d.setMonth(current.mo);
+    d.setDate(dt + 1);
+    onChange(d);
+
     setOpened(false);
   };
 
