@@ -47,6 +47,7 @@ and the code snippet to use the component:
         name: PropTypes.string,            // required - metric name
         style: PropTypes.object,           // optional - SCSS class name for metric name
         className: PropTypes.string,       // optional - SCSS style for metric name
+        toolTip: PropTypes.bool            // optional - enable tool tip for metric name (default: false)
       }),
     };
 ```
