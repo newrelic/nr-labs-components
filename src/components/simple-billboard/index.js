@@ -58,20 +58,15 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
     };
     const icon =
       difference > 0
-        ? {
-            type: 'uparrow',
-            fill: '#9EA5A9',
-          }
-        : {
-            type: 'downarrow',
-            fill: '#9EA5A9',
-          };
+        ? { type: 'uparrow', }
+        : { type: 'downarrow', };
+
     return (
       <svg
         className={`${styles['metric-status']} ${statusTrend.className || ''}`}
         style={{ ...statusTrend.style } || {}}
         viewBox="0 0 16 16"
-        fill={icon.fill}
+        fill="#9EA5A9"
         xmlns="http://www.w3.org/2000/svg"
         focusable="false"
         role="img"
