@@ -58,6 +58,9 @@ A component that renders a progress bar.
 ### [FilterBar](src/components/filter-bar)
 Component that allows a user to filter options.
 
+### [DatePicker](src/components/date-picker)
+Component that displays a calendar to select a date
+
 ## Utilities
 
 ### [timeRangeToNrql](src/utils/time-range-to-nrql/)
