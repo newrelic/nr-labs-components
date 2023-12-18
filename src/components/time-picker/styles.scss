@@ -1,0 +1,45 @@
+.time-picker {
+  box-sizing: border-box;
+  direction: ltr;
+  max-height: 178px;
+  max-width: 98px;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+}
+
+.time-list-search {
+  flex: 1 0 10%;
+  border-bottom: 1px solid #E7E9EA;
+  input {
+    background-color: transparent;
+  }
+}
+
+.time-list-items {
+  flex: auto;
+  overflow-y: auto;
+}
+
+.time-list-item {
+  height: 24px;
+  width: 100%;
+  appearance: none;
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-family: inherit;
+  color: #293338;
+  text-align: left;
+  cursor: pointer;
+  padding: 0 12px;
+  white-space: nowrap;
+  font-weight: normal;
+  border-radius: 0;
+  min-height: 24px;
+
+
+  &:hover {
+    box-shadow: none;
+  }
+}
