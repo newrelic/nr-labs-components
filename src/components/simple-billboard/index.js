@@ -8,7 +8,7 @@ import styles from './styles.scss';
 /**
  * @param {Object} metric - metric value, previousValue, optional: prefix, suffix, className, style
  * @param {Object} statusTrend - optional: className, style
- * @param {Object} title - metric name, optional: className, style
+ * @param {Object} title - metric name, optional: className, style, toolTip
  * @return {JSX Object} - RENDERING name, value, up/down trend when previousValue present
  */
 const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
@@ -58,20 +58,15 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
     };
     const icon =
       difference > 0
-        ? {
-            type: 'uparrow',
-            fill: '#02865B',
-          }
-        : {
-            type: 'downarrow',
-            fill: '#DF2D24',
-          };
+        ? { type: 'uparrow', }
+        : { type: 'downarrow', };
+
     return (
       <svg
         className={`${styles['metric-status']} ${statusTrend.className || ''}`}
         style={{ ...statusTrend.style } || {}}
         viewBox="0 0 16 16"
-        fill={icon.fill}
+        fill="#9EA5A9"
         xmlns="http://www.w3.org/2000/svg"
         focusable="false"
         role="img"
@@ -83,7 +78,7 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
   }, [difference]);
 
   return (
-    <div  className="simple-billboard">
+    <div className="simple-billboard">
       <div
         className={`${styles['metric-color']} ${styles['metric-value']} ${
           metric.className || ''
@@ -94,7 +89,18 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
         <span>{changeStatus}</span>
       </div>
 
-      <Tooltip text={title.name}>
+      {title.toolTip ? (
+        <Tooltip text={title.name}>
+          <div
+            className={`${styles['metric-color']} ${styles['metric-name']} ${
+              title.className || ''
+            }`}
+            style={{ ...title.style } || {}}
+          >
+            {title.name}
+          </div>
+        </Tooltip>
+      ) : (
         <div
           className={`${styles['metric-color']} ${styles['metric-name']} ${
             title.className || ''
@@ -103,7 +109,7 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
         >
           {title.name}
         </div>
-      </Tooltip>
+      )}
     </div>
   );
 };
@@ -125,6 +131,7 @@ SimpleBillboard.propTypes = {
     name: PropTypes.string,
     style: PropTypes.object,
     className: PropTypes.string,
+    toolTip: PropTypes.bool,
   }),
 };
 
