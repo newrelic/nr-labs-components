@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - TimePicker component by [@amit-y](https://github.com/amit-y)
 
+## [1.17.1] - 2023-12-18
+
+- add option to enable title's tooltip + change up/down trend arrow colors to grey by [@shahramk](https://github.com/shahramk)
+
 ## [1.17.0] - 2023-12-14
 
 ### Added
