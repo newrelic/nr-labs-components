@@ -67,6 +67,9 @@ Component to select time values
 ### [DateTimePicker](src/components/date-time-picker)
 Component to select date/time
 
+### [TimeRangePicker](src/components/time-range-picker)
+Component to select time range
+
 ## Utilities
 
 ### [timeRangeToNrql](src/utils/time-range-to-nrql/)

@@ -1,0 +1,78 @@
+.time-range-picker-button {
+  span:first-of-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: normal;
+  }
+  .button-chevron {
+    font-size: 8px !important;
+  }
+}
+
+.time-range-list {
+  padding: 4px 0;
+}
+
+.time-range-list-items {
+  flex: auto;
+  overflow-y: auto;
+}
+
+.time-range-list-item {
+  display: inline-flex;
+  justify-content: start;
+  height: 24px;
+  width: 100%;
+  appearance: none;
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-family: inherit;
+  color: #293338;
+  text-align: left;
+  cursor: pointer;
+  padding: 0 12px;
+  white-space: nowrap;
+  font-weight: normal;
+  border-radius: 0;
+  min-height: 24px;
+
+
+  &:hover {
+    box-shadow: none;
+  }
+
+  &.custom {
+    span:first-of-type {
+      width: 100%;
+      display: inline-flex;
+      justify-content: end;
+    }
+
+  }
+  
+  &.open {
+    background-color: #E8E8E8;
+  }
+}
+
+.time-range-list-break {
+  border: 0;
+  border-top: 1px solid #E7E9EA;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.custom-entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+.custom-buttons {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 4px;
+}
