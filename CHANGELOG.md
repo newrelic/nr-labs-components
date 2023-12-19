@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- TimePicker component by [@amit-y](https://github.com/amit-y)
+
 ## [1.19.0] - 2023-12-18
 
 ### Added
 
-- TimePicker component by [@amit-y](https://github.com/amit-y)
+- DateTimePicker component by [@amit-y](https://github.com/amit-y)
 
 ## [1.18.0] - 2023-12-18
 
