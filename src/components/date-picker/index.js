@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon, Popover, PopoverTrigger, PopoverBody, TextField } from 'nr1';
@@ -18,7 +18,7 @@ const DAYS_OF_WEEK = daysOfWeek();
 
 import styles from './styles.scss';
 
-const DatePicker = ({ date, onChange, validFrom }) => {
+const DatePicker = ({ date, validFrom, onChange }) => {
   const [opened, setOpened] = useState(false);
   const [current, setCurrent] = useState(extractDateParts(new Date()));
 
@@ -37,22 +37,29 @@ const DatePicker = ({ date, onChange, validFrom }) => {
     setCurrent(extractDateParts(nextMo));
   };
 
-  const isDateInCurrentMonth = (d = new Date()) =>
-    d.getFullYear() === current.yr && d.getMonth() === current.mo;
+  const isDateInCurrentMonth = useCallback(
+    (d = new Date()) =>
+      d.getFullYear() === current.yr && d.getMonth() === current.mo,
+    [current]
+  );
 
-  const clickHandler = (dt) => {
-    if (!isSelectableDate(current, dt + 1, validFrom) || !onChange) return;
+  const clickHandler = useCallback(
+    (e, dt) => {
+      e.stopPropagation();
+      if (!isSelectableDate(current, dt + 1, validFrom) || !onChange) return;
 
-    const d = date instanceof Date ? new Date(date.getTime()) : new Date();
-    d.setFullYear(current.yr);
-    d.setMonth(current.mo);
-    d.setDate(dt + 1);
-    onChange(d);
+      const d = date instanceof Date ? new Date(date.getTime()) : new Date();
+      d.setFullYear(current.yr);
+      d.setMonth(current.mo);
+      d.setDate(dt + 1);
+      onChange(d);
 
-    setOpened(false);
-  };
+      setOpened(false);
+    },
+    [current]
+  );
 
-  const changeHandler = (_, o) => setOpened(o);
+  const changeHandler = useCallback((_, o) => setOpened(o), []);
 
   return (
     <Popover opened={opened} onChange={changeHandler}>
@@ -101,7 +108,7 @@ const DatePicker = ({ date, onChange, validFrom }) => {
                   ? styles.disabled
                   : ''
               }`}
-              onClick={() => clickHandler(i)}
+              onClick={(e) => clickHandler(e, i)}
             >
               {i + 1}
             </div>
