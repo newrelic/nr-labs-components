@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- add option to enable title's tooltip + change up/down trend arrow colors to grey by [@shahramk](https://github.com/shahramk)
+
 ## [1.16.0] - 2023-08-09
 
 ### Added
