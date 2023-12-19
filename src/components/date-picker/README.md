@@ -24,3 +24,4 @@ function MyComponent() {
 
 - date (date): The default date 
 - onChange (function): A function that is called when the user selects a date
+- validFrom (date): only allow dates starting from the provided value
