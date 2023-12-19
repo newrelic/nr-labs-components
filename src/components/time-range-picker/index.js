@@ -100,7 +100,7 @@ const TimeRangePicker = ({ timeRange, onChange }) => {
 
   const toggleCustomHandler = () => {
     if (!isCustomOpen) {
-      if (timeRange['begin_time'] && timeRange['end_time']) {
+      if (timeRange && timeRange['begin_time'] && timeRange['end_time']) {
         setBeginTime(timeRange['begin_time']);
         setEndTime(timeRange['end_time']);
       } else {
