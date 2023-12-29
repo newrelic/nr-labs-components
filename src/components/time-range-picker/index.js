@@ -67,8 +67,18 @@ const TimeRangePicker = ({ timeRange, onChange }) => {
       setEndTime(null);
     } else {
       setSelected(TEXTS.CUSTOM);
-      setBeginTime(timeRange['begin_time']);
-      setEndTime(timeRange['end_time']);
+      const { begin_time, end_time } = timeRange;
+      let b, e;
+      try {
+        b = begin_time instanceof Date ? begin_time : new Date(begin_time);
+        e = end_time instanceof Date ? end_time : new Date(end_time);
+      } catch (_) {
+        // continue regardless of error
+      }
+      if (b && e) {
+        setBeginTime(b);
+        setEndTime(e);
+      }
     }
   }, [timeRange]);
 
@@ -116,9 +126,9 @@ const TimeRangePicker = ({ timeRange, onChange }) => {
   const setCustomHandler = useCallback(() => {
     if (onChange)
       onChange({
-        begin_time: beginTime,
+        begin_time: beginTime instanceof Date ? beginTime.getTime() : beginTime,
         duration: null,
-        end_time: endTime,
+        end_time: endTime instanceof Date ? endTime.getTime() : endTime,
       });
     setOpened(false);
   }, [beginTime, endTime]);
