@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.21.1] - 2023-12-18
+
 ### Changed
 
 - DatePicker - disallow bubbling of onclick event, which was causing parent popover to close
