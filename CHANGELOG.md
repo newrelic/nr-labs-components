@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- TimeRangePicker - return timestamp for `begin_time` and `end_time`
+
 ## [1.21.1] - 2023-12-18
 
 ### Changed
