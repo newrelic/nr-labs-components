@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- FilterBar - minor refactor
+
+### Added
+
+- FilterBar - ability to return `LIKE` statements
+
+## [1.21.2] - 2023-12-29
+
+### Changed
+
 - TimeRangePicker - return timestamp for `begin_time` and `end_time`
 
 ## [1.21.1] - 2023-12-18

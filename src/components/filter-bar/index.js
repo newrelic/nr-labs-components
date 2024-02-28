@@ -5,6 +5,13 @@ import { Spinner } from 'nr1';
 
 import { CloseIcon, FilterByIcon, OpenIcon, SearchIcon } from './icons';
 import { Conjunction, Label, Value } from './components';
+import {
+  generateFilterString,
+  optionsReducer,
+  queryStringFromSelectedOption,
+  textMatchObject,
+  valueObject,
+} from './utils';
 
 import styles from './styles.scss';
 
@@ -15,14 +22,15 @@ const FilterBar = ({ options, onChange, getValues }) => {
   const [filterItems, setFilterItems] = useState([]);
   const [filterString, setFilterString] = useState('');
   const [searchTexts, setSearchTexts] = useState([]);
-  const [displayOptions, setDisplayOptions] = useState([]);
-  const [optionShouldMatch, setOptionShouldMatch] = useState([]);
-  const [optionFilterMatch, setOptionFilterMatch] = useState([]);
+  const [isOptionOpen, setIsOptionOpen] = useState([]);
+  const [isOptionNotMatchArr, setIsOptionNotMatchArr] = useState([]);
+  const [isOptionDisplayed, setIsOptionDisplayed] = useState([]);
   const [optionsLoading, setOptionsLoading] = useState([]);
   const [optionsSearchText, setOptionsSearchText] = useState('');
   const [values, setValues] = useState([]);
   const [shownValues, setShownValues] = useState([]);
   const [conjunctions, setConjunctions] = useState([]);
+  const [textMatchIsSelected, setTextMatchIsSelected] = useState([]);
   const lastGroup = useRef('');
   const searchTimeout = useRef();
 
@@ -46,36 +54,44 @@ const FilterBar = ({ options, onChange, getValues }) => {
   });
 
   useEffect(() => {
-    setDisplayOptions(options.map((_, i) => !i));
-    setOptionShouldMatch(options.map(() => true));
-    setOptionFilterMatch(options.map(() => true));
-    setOptionsLoading(options.map(() => false));
-    setValues(
-      options.map((o) =>
-        (o.values || []).map((v) => ({
-          value: v,
-          display: String(v),
-          id: String(v).replaceAll('^[^a-zA-Z_$]|[^\\w$]', '_'),
-          type: o.type,
-          attribute: o.option,
-          isIncluded: true,
-          isSelected: false,
-          shouldMatch: true,
-        }))
-      )
-    );
-    setShownValues(
-      options.map((o) => (o.values.length > 6 ? 5 : o.values.length))
-    );
+    const optionsReduction = (options || []).reduce(optionsReducer, {
+      open: [],
+      notMatchs: [],
+      displayed: [],
+      loading: [],
+      optionValues: [],
+      srchTxts: [],
+      txtMatchSelected: [],
+      fltrItems: [],
+      cnjctns: [],
+      valsShown: [],
+    });
+
+    setIsOptionOpen(optionsReduction.open || []);
+    setIsOptionNotMatchArr(optionsReduction.notMatchs || []);
+    setIsOptionDisplayed(optionsReduction.displayed || []);
+    setOptionsLoading(optionsReduction.loading || []);
+    setSearchTexts(optionsReduction.srchTxts || []);
+    setTextMatchIsSelected(optionsReduction.txtMatchSelected || []);
+    setShownValues(optionsReduction.valsShown || []);
+    setValues(optionsReduction.optionValues || []);
+    setFilterItems(optionsReduction.fltrItems || []);
+    setConjunctions(optionsReduction.cnjctns || []);
   }, [options]);
 
   useEffect(() => {
-    const fltrStr = updateFilterString();
+    const fltrStr = generateFilterString(
+      filterItems,
+      conjunctions,
+      values,
+      searchTexts,
+      isOptionNotMatchArr
+    );
     if (fltrStr !== filterString) {
       setFilterString(fltrStr);
       if (onChange) onChange(fltrStr);
     }
-  }, [filterItems, conjunctions, optionShouldMatch]);
+  }, [filterItems, conjunctions, values, searchTexts, isOptionNotMatchArr]);
 
   const itemsListWidth =
     inputField && inputField.current
@@ -88,36 +104,92 @@ const FilterBar = ({ options, onChange, getValues }) => {
     const vals = [...values];
     vals[optionIdx][valueIdx].isSelected =
       !vals[optionIdx][valueIdx].isSelected;
-    setValues(vals);
-    const fltrItems = vals
-      .reduce(
-        (qry, opt, i) => {
-          opt.reduce((qry, val, j) => {
-            if (!val.isSelected) return qry;
-            const idx = +!val.shouldMatch;
-            if (!(val.attribute in qry[idx]))
-              qry[idx][val.attribute] = {
-                attribute: val.attribute,
-                optionIndex: i,
-                type: val.type,
-                matchType: val.shouldMatch,
-                valueIndexes: [],
-              };
-            qry[idx][val.attribute].valueIndexes.push(j);
-            return qry;
-          }, qry);
-          return qry;
-        },
-        [{}, {}]
-      )
-      .reduce(
-        (fi, matches) =>
-          Object.keys(matches).reduce((fi, opt) => [...fi, matches[opt]], fi),
-        []
-      );
 
-    if (conjunctions.length < fltrItems.length)
-      setConjunctions([...conjunctions, 'AND']);
+    const { fltrItems, itemUpdated } = [...filterItems].reduce(
+      (acc, fi) => {
+        if (fi.optionIndex !== optionIdx)
+          return {
+            ...acc,
+            fltrItems: [...acc.fltrItems, fi],
+          };
+        return vals[optionIdx][valueIdx].isSelected
+          ? {
+              ...acc,
+              fltrItems: [
+                ...acc.fltrItems,
+                {
+                  ...fi,
+                  matchText: '',
+                  valueIndexes: [...fi.valueIndexes, valueIdx],
+                },
+              ],
+              itemUpdated: true,
+            }
+          : { ...acc, itemUpdated: true };
+      },
+      { fltrItems: [], itemUpdated: false }
+    );
+    if (!itemUpdated) {
+      const { option: attribute, type } = options[optionIdx];
+      fltrItems.push({
+        attribute,
+        optionIndex: optionIdx,
+        type,
+        valueIndexes: [valueIdx],
+      });
+      setConjunctions((cnjs) => [...cnjs, 'AND']);
+    }
+
+    if (vals[optionIdx][valueIdx].isSelected)
+      setTextMatchIsSelected((tms) =>
+        tms.map((tm, i) => (i === optionIdx ? false : tm))
+      );
+    setValues(vals);
+    setFilterItems(fltrItems);
+  };
+
+  const checkTextMatchHandler = (optionIdx) => {
+    const isSelected = !textMatchIsSelected[optionIdx];
+    const matchText = isSelected ? searchTexts[optionIdx] : '';
+    setTextMatchIsSelected((tms) =>
+      tms.map((t, i) => (i === optionIdx ? isSelected : t))
+    );
+    setValues((vals) =>
+      vals.map((val, i) =>
+        i === optionIdx ? val.map((v) => ({ ...v, isSelected: false })) : val
+      )
+    );
+    const { fltrItems, itemUpdated } = [...filterItems].reduce(
+      (acc, fi) => {
+        if (fi.optionIndex !== optionIdx)
+          return {
+            ...acc,
+            fltrItems: [...acc.fltrItems, fi],
+          };
+        return isSelected
+          ? {
+              ...acc,
+              fltrItems: [
+                ...acc.fltrItems,
+                { ...fi, matchText, valueIndexes: [] },
+              ],
+              itemUpdated: true,
+            }
+          : { ...acc, itemUpdated: true };
+      },
+      { fltrItems: [], itemUpdated: false }
+    );
+    if (!itemUpdated) {
+      const { option: attribute, type } = options[optionIdx];
+      fltrItems.push({
+        attribute,
+        optionIndex: optionIdx,
+        type,
+        matchText,
+        valueIndexes: [],
+      });
+      setConjunctions((cnjs) => [...cnjs, 'AND']);
+    }
     setFilterItems(fltrItems);
   };
 
@@ -125,14 +197,14 @@ const FilterBar = ({ options, onChange, getValues }) => {
     const searchText = evt.target.value;
     setOptionsSearchText(searchText);
     const searchRE = new RegExp(searchText, 'i');
-    setOptionFilterMatch(options.map((o) => searchRE.test(o.option)));
+    setIsOptionDisplayed(options.map(({ option }) => searchRE.test(option)));
     setShowItemsList(true);
   };
 
   const updateSearchText = (evt, option, idx) => {
     const searchText = evt.target.value;
-    setSearchTexts(searchTexts.map((st, i) => (i === idx ? searchText : st)));
-    const searchRE = new RegExp(searchText, 'i');
+    setSearchTexts((sts) => sts.map((st, i) => (i === idx ? searchText : st)));
+    const searchRE = new RegExp(searchText.replaceAll('%', '.*'), 'i');
 
     clearTimeout(searchTimeout.current);
     if (searchText.trim()) {
@@ -185,7 +257,7 @@ const FilterBar = ({ options, onChange, getValues }) => {
 
   const optionClickHandler = async (option, idx) => {
     const shouldLoad = !values[idx].length;
-    setDisplayOptions(displayOptions.map((d, i) => (i === idx ? !d : d)));
+    setIsOptionOpen((ioo) => ioo.map((o, i) => (i === idx ? !o : o)));
     setOptionsLoading(
       optionsLoading.map((l, i) => (i === idx && shouldLoad ? true : l))
     );
@@ -211,16 +283,9 @@ const FilterBar = ({ options, onChange, getValues }) => {
     setValues(
       options.map((o, i) =>
         i === idx
-          ? (vals || []).map((v) => ({
-              value: v,
-              display: String(v),
-              id: String(v).replaceAll('^[^a-zA-Z_$]|[^\\w$]', '_'),
-              type: o.type,
-              attribute: o.option,
-              isIncluded: true,
-              isSelected: false,
-              shouldMatch: true,
-            }))
+          ? (vals || []).map((v) =>
+              valueObject({ value: v, isSelected: false }, o)
+            )
           : values[i]
       )
     );
@@ -235,7 +300,7 @@ const FilterBar = ({ options, onChange, getValues }) => {
   const loadValuesLive = async (attr, type, idx, searchStr, searchRE) => {
     let cond = ` WHERE `;
     if (type === 'string') {
-      cond += ` ${attr} LIKE '%${searchStr}%' `;
+      cond += ` ${attr} LIKE '%${searchStr}%' `; // TODO: remove '%' if not needed
     } else {
       const matches = [...searchStr.matchAll(/([><]+)\s{0,}([.-\d]{1,})/g)];
       if (matches.length) {
@@ -256,16 +321,9 @@ const FilterBar = ({ options, onChange, getValues }) => {
     }));
     return vals.reduce((acc, val) => {
       if (!acc.some((v) => v.value === val))
-        acc.push({
-          value: val,
-          display: String(val),
-          id: String(val).replaceAll('^[^a-zA-Z_$]|[^\\w$]', '_'),
-          type: type,
-          attribute: attr,
-          isIncluded: true,
-          isSelected: false,
-          shouldMatch: true,
-        });
+        acc.push(
+          valueObject({ value: val, isSelected: false }, { type, option: attr })
+        );
       return acc;
     }, prevValues);
   };
@@ -279,63 +337,32 @@ const FilterBar = ({ options, onChange, getValues }) => {
   const selectedValuesCount = (idx) =>
     values[idx].reduce((acc, val) => (val.isSelected ? (acc += 1) : acc), 0);
 
-  const filterItemStr = (item) => {
-    const attribValues = item.valueIndexes.map(
-      (valIdx) => values[item.optionIndex][valIdx].value
-    );
-    const hasMany = attribValues.length > 1;
-    const surround = item.type === 'string' ? `'` : '';
-    const joinStr = `${surround}, ${surround}`;
-    const operator = optionShouldMatch[item.optionIndex] // eslint-disable-line no-nested-ternary
-      ? hasMany
-        ? 'IN'
-        : '='
-      : hasMany
-      ? 'NOT IN'
-      : '!=';
-    const valuesStr = `${hasMany ? '(' : ''}${surround}${attribValues.join(
-      joinStr
-    )}${surround}${hasMany ? ')' : ''}`;
-    return `${item.attribute} ${operator} ${valuesStr}`;
-  };
-
   const removeFilterItem = (idx) => {
     const fltrItems = [...filterItems];
     const cnjctns = [...conjunctions];
     const optIdx = fltrItems[idx].optionIndex;
     const vals = values.map((opt, i) =>
-      i === optIdx
-        ? opt.map((val) => ({ ...val, isSelected: false, shouldMatch: true }))
-        : opt
+      i === optIdx ? opt.map((val) => ({ ...val, isSelected: false })) : opt
     );
     fltrItems.splice(idx, 1);
     cnjctns.splice(idx, 1);
+    setTextMatchIsSelected((tms) =>
+      tms.map((t, i) => (i === optIdx ? false : t))
+    );
     setConjunctions(cnjctns);
     setFilterItems(fltrItems);
     setValues(vals);
   };
-
-  const updateFilterString = () =>
-    filterItems.length
-      ? filterItems
-          .map(
-            (item, i) =>
-              `${filterItemStr(item)} ${
-                i < filterItems.length - 1 ? conjunctions[i] : ''
-              }`
-          )
-          .join(' ')
-      : '';
 
   const changeConjunction = (idx, operator) =>
     setConjunctions(
       conjunctions.map((conj, i) => (i === idx ? operator : conj))
     );
 
-  const changeMatchType = (idx, shouldMatch, evt) => {
+  const changeMatchTypeHandler = (idx, isNotMatch, evt) => {
     evt.stopPropagation();
-    setOptionShouldMatch(
-      optionShouldMatch.map((type, i) => (i === idx ? shouldMatch : type))
+    setIsOptionNotMatchArr((arr) =>
+      arr.map((onm, i) => (i === idx ? isNotMatch : onm))
     );
   };
 
@@ -359,7 +386,12 @@ const FilterBar = ({ options, onChange, getValues }) => {
           {filterItems.map((item, i) => (
             <React.Fragment key={i}>
               <Label
-                value={filterItemStr(item)}
+                value={queryStringFromSelectedOption(
+                  item,
+                  values,
+                  searchTexts,
+                  isOptionNotMatchArr
+                )}
                 onRemove={() => removeFilterItem(i)}
               />
               <Conjunction
@@ -383,7 +415,7 @@ const FilterBar = ({ options, onChange, getValues }) => {
       {showItemsList ? (
         <div className={styles['list']} style={{ width: dropdownWidth }}>
           {options.map((option, i) =>
-            optionFilterMatch[i] ? (
+            isOptionDisplayed[i] ? (
               <>
                 {option.group && option.group !== lastGroup.current
                   ? groupBar(option.group)
@@ -394,7 +426,7 @@ const FilterBar = ({ options, onChange, getValues }) => {
                     onClick={() => optionClickHandler(option, i)}
                   >
                     <img
-                      src={displayOptions[i] ? OpenIcon : CloseIcon}
+                      src={isOptionOpen[i] ? OpenIcon : CloseIcon}
                       alt="show or hide options"
                     />
                     <span>{option.option}</span>
@@ -403,7 +435,7 @@ const FilterBar = ({ options, onChange, getValues }) => {
                     ) : (
                       selectedValuesCounter(i)
                     )}
-                    {displayOptions[i] ? (
+                    {isOptionOpen[i] ? (
                       <span
                         className={`${styles['list-option-picker']} ${
                           !selectedValuesCount(i) ? styles.lighten : ''
@@ -411,31 +443,49 @@ const FilterBar = ({ options, onChange, getValues }) => {
                       >
                         <span
                           className={`${styles.equal} ${
-                            optionShouldMatch[i] ? styles.selected : ''
+                            !isOptionNotMatchArr[i] ? styles.selected : ''
                           }`}
-                          onClick={(evt) => changeMatchType(i, true, evt)}
+                          onClick={(evt) =>
+                            changeMatchTypeHandler(i, false, evt)
+                          }
                         />
                         <span
                           className={`${styles['not-equal']} ${
-                            !optionShouldMatch[i] ? styles.selected : ''
+                            isOptionNotMatchArr[i] ? styles.selected : ''
                           }`}
-                          onClick={(evt) => changeMatchType(i, false, evt)}
+                          onClick={(evt) =>
+                            changeMatchTypeHandler(i, true, evt)
+                          }
                         />
                       </span>
                     ) : null}
                   </div>
-                  {displayOptions[i] ? (
+                  {isOptionOpen[i] ? (
                     <>
                       <div className={styles['list-option-search']}>
                         <img src={SearchIcon} alt="search options" />
                         <input
                           type="text"
+                          placeholder="type to filter or for partial matches"
                           style={{ backgroundColor: '#FFF' }}
                           value={searchTexts[i]}
                           onChange={(evt) => updateSearchText(evt, option, i)}
                         />
                       </div>
                       <div className={styles['list-option-values']}>
+                        {option.type === 'string' && searchTexts[i] ? (
+                          <Value
+                            value={textMatchObject(
+                              searchTexts[i],
+                              isOptionNotMatchArr[i],
+                              textMatchIsSelected[i]
+                            )}
+                            width={checkboxWidth}
+                            optionIndex={i}
+                            valueIndex={99999}
+                            onChange={checkTextMatchHandler}
+                          />
+                        ) : null}
                         {shownAndIncluded(values[i], i).map((value, j) => (
                           <Value
                             value={value}
@@ -476,7 +526,21 @@ FilterBar.propTypes = {
     PropTypes.shape({
       option: PropTypes.string,
       type: PropTypes.oneOf(['string', 'number', 'boolean']),
-      values: PropTypes.array,
+      isNotMatch: PropTypes.bool,
+      textMatch: PropTypes.string,
+      values: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.shape({
+            value: PropTypes.oneOfType([
+              PropTypes.string,
+              PropTypes.number,
+              PropTypes.bool,
+            ]),
+            isSelected: PropTypes.bool,
+          }),
+        ])
+      ),
       group: PropTypes.string,
       info: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
     })

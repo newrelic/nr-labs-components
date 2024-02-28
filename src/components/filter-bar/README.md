@@ -34,7 +34,14 @@ The FilterBar component accepts the following props:
 
 - `option` (string) - the title for the option
 - `type` (string) - option type - either `string` or `numeric`
-- `values` (array) - array of values for the option
+- `isNotMatch` (bool) - when true, returns a not match
+- `textMatch` (string) - if present return a `LIKE TEXT_MATCH` query 
+- `values` (array) - array of values object (see details below) for the option
+
+#### `values` object
+
+- `value` (string|number) - the value
+- `isSelected` (bool) - is value selected
 
 #### `getValues`
 
