@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- TimeRangePicker - prop to hide `Default` 
+- TimeRangePicker - `maxRangeMins` prop to set set a max range in selected date/times
+
+## [1.22.0] - 2024-03-12
+
 ### Changed
 
 - FilterBar - minor refactor

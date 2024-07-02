@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
+  Button,
   Icon,
+  List,
+  ListItem,
   Popover,
   PopoverTrigger,
   PopoverBody,
-  List,
-  ListItem,
-  Button,
+  Tooltip,
 } from 'nr1';
 
 import DateTimePicker from '../date-time-picker';
@@ -20,6 +21,7 @@ const TEXTS = {
   CANCEL: 'Cancel',
   CUSTOM: 'Custom',
   DEFAULT: 'Default',
+  SELECT: 'Select',
 };
 
 const TIME_RANGES = [
@@ -37,31 +39,73 @@ const TIME_RANGES = [
   { break: true },
 ];
 
-const normalizedDateTime = (dt = new Date()) =>
-  new Date(
-    dt.getFullYear(),
-    dt.getMonth(),
-    dt.getDate(),
-    dt.getHours(),
-    dt.getMinutes()
-  );
+const normalizedDateTime = (dt = new Date()) => new Date(dt.setSeconds(0, 0));
 
-const TimeRangePicker = ({ timeRange, onChange }) => {
+const formattedText = (num, txt) => {
+  if (!num || !txt) return '';
+  return `${num} ${txt}${num > 1 ? 's' : ''}`;
+};
+
+const displayMins = (minutes) => {
+  if (!minutes) return '';
+  const minsInHour = 60,
+    minsInDay = 60 * 24;
+  if (minutes < minsInHour) return formattedText(minutes, 'minute');
+  const mins = minutes % minsInHour;
+  if (minutes < minsInDay) {
+    const hours = Math.floor(minutes / minsInHour);
+    return `${formattedText(hours, 'hour')} ${formattedText(mins, 'minute')}`;
+  }
+  const days = Math.floor(minutes / minsInDay);
+  const hours = Math.floor((minutes - days * minsInDay) / minsInHour);
+  return `${formattedText(days, 'day')} ${formattedText(
+    hours,
+    'hour'
+  )} ${formattedText(mins, 'minute')}`;
+};
+
+const TimeRangePicker = ({
+  timeRange,
+  maxRangeMins,
+  hideDefault,
+  onChange,
+}) => {
   const [opened, setOpened] = useState(false);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
+  const [customSaveDisabled, setCustomSaveDisabled] = useState(true);
   const [selected, setSelected] = useState('');
   const [beginTime, setBeginTime] = useState();
   const [endTime, setEndTime] = useState();
+  const [filteredTimeRanges, setFilteredTimeRanges] = useState(TIME_RANGES);
+
+  useEffect(
+    () =>
+      setFilteredTimeRanges(() => {
+        if (!hideDefault && !maxRangeMins) return TIME_RANGES;
+        return TIME_RANGES.reduce((acc, tr, idx) => {
+          if (hideDefault && idx < 2) return acc;
+          if (
+            (tr.break && !acc[acc.length - 1]?.break) ||
+            !maxRangeMins ||
+            tr.offset / 60000 <= maxRangeMins
+          )
+            return [...acc, tr];
+          return acc;
+        }, []);
+      }),
+    [maxRangeMins, hideDefault]
+  );
 
   useEffect(() => {
+    const fallbackTimeRangeLabel = hideDefault ? TEXTS.SELECT : TEXTS.DEFAULT;
     if (!timeRange) {
-      setSelected(TEXTS.DEFAULT);
+      setSelected(fallbackTimeRangeLabel);
       setBeginTime(null);
       setEndTime(null);
     } else if (timeRange.duration) {
       setSelected(
-        TIME_RANGES.find((tr) => tr.offset === timeRange.duration)?.label ||
-          TEXTS.DEFAULT
+        filteredTimeRanges.find((tr) => tr.offset === timeRange.duration)
+          ?.label || fallbackTimeRangeLabel
       );
       setBeginTime(null);
       setEndTime(null);
@@ -80,7 +124,17 @@ const TimeRangePicker = ({ timeRange, onChange }) => {
         setEndTime(e);
       }
     }
-  }, [timeRange]);
+  }, [timeRange, filteredTimeRanges, hideDefault]);
+
+  useEffect(() => {
+    if (!beginTime || !endTime) {
+      setCustomSaveDisabled(true);
+    } else if (maxRangeMins && (endTime - beginTime) / 60000 > maxRangeMins) {
+      setCustomSaveDisabled(true);
+    } else {
+      setCustomSaveDisabled(false);
+    }
+  }, [beginTime, endTime, maxRangeMins]);
 
   const setDurationHandler = (duration) => {
     if (onChange)
@@ -161,7 +215,7 @@ const TimeRangePicker = ({ timeRange, onChange }) => {
       <PopoverBody>
         <div className={styles['time-range-list']}>
           <List className={styles['time-range-list-items']}>
-            {TIME_RANGES.map((tr, i) => (
+            {filteredTimeRanges.map((tr, i) => (
               <ListItem key={i}>
                 {tr.break ? (
                   <hr className={styles['time-range-list-break']} />
@@ -211,13 +265,22 @@ const TimeRangePicker = ({ timeRange, onChange }) => {
                     validTill={normalizedDateTime()}
                   />
                   <div className={styles['custom-buttons']}>
-                    <Button
-                      type={Button.TYPE.PRIMARY}
-                      sizeType={Button.SIZE_TYPE.SMALL}
-                      onClick={setCustomHandler}
+                    <Tooltip
+                      text={
+                        customSaveDisabled
+                          ? `Only up to ${displayMins(maxRangeMins)} allowed`
+                          : ''
+                      }
                     >
-                      {TEXTS.APPLY}
-                    </Button>
+                      <Button
+                        type={Button.TYPE.PRIMARY}
+                        sizeType={Button.SIZE_TYPE.SMALL}
+                        disabled={customSaveDisabled}
+                        onClick={setCustomHandler}
+                      >
+                        {TEXTS.APPLY}
+                      </Button>
+                    </Tooltip>
                     <Button
                       type={Button.TYPE.PLAIN}
                       sizeType={Button.SIZE_TYPE.SMALL}
@@ -242,6 +305,8 @@ TimeRangePicker.propTypes = {
     duration: PropTypes.number,
     end_time: PropTypes.number,
   }),
+  maxRangeMins: PropTypes.number,
+  hideDefault: PropTypes.bool,
   onChange: PropTypes.func,
 };
 
