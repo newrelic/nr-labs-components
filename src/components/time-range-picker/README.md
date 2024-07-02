@@ -23,6 +23,8 @@ function MyComponent() {
 ### Props
 
 - date (date): The default time period 
+- maxRangeMins (int): The max time range allowed, in minutes
+- hideDefault (boolean): If true, hides the `Default` selection
 - onChange (function): A function that is called when the user selects a time range. The function is passed an abject in the following format:
 
 ```javascript
