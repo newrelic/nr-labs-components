@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- TimeRangePicker - unable to select custom end dates other than today
+- TimeRangePicker - changing time value resets the date 
+
+## [1.23.0] - 2024-07-02
+
 ### Added
 
 - TimeRangePicker - prop to hide `Default` 
