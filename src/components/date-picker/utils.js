@@ -25,27 +25,12 @@ const extractDateParts = (d) => ({
   dt: d.getDate(),
 });
 
-const afterToday = (cur, d) => {
-  const today = new Date();
-  return (
-    cur.yr === today.getFullYear() &&
-    cur.mo === today.getMonth() &&
-    d > today.getDate()
-  );
-};
-
 const isSelectableDate = (cur, d, validFrom) => {
   let isValid = true;
-  if (validFrom && validFrom instanceof Date) {
-    const validDate = new Date(
-      validFrom.getFullYear(),
-      validFrom.getMonth(),
-      validFrom.getDate()
-    );
-    const curDt = new Date(cur.yr, cur.mo, d);
-    isValid = curDt >= validDate;
-  }
-  return isValid && !afterToday(cur, d);
+  const selectedDt = new Date(cur.yr, cur.mo, d).setHours(0, 0, 0, 0);
+  if (validFrom && validFrom instanceof Date)
+    isValid = selectedDt >= new Date(validFrom.getTime()).setHours(0, 0, 0, 0);
+  return isValid && selectedDt <= new Date().setHours(0, 0, 0, 0);
 };
 
 const selectedDate = (index, cur, dt) => {
