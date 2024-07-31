@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.23.1] - 2024-07-31
+
 ### Fixed
 
 - TimeRangePicker - unable to select custom end dates other than today
