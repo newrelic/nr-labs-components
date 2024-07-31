@@ -38,13 +38,12 @@ const TimePicker = ({ time, validFrom, validTill, onChange }) => {
   const [filter, setFilter] = useState('');
   const [times, setTimes] = useState([]);
 
+  const isValidTimeWrapper = (ts) =>
+    isValidTime(ts, validFrom, validTill, time);
+
   useEffect(() => {
     if (!filter) {
-      setTimes(
-        TIMES_LIST.filter(({ value }) =>
-          isValidTime(value, validFrom, validTill, time)
-        )
-      );
+      setTimes(TIMES_LIST.filter(({ value }) => isValidTimeWrapper(value)));
       return;
     }
     const re = /^(1[0-2]|0?[1-9]):?([0-5]?[0-9])? ?([AaPp][Mm]?)?/;
@@ -59,13 +58,12 @@ const TimePicker = ({ time, validFrom, validTill, onChange }) => {
 
       const re2 = new RegExp(reStr);
       const matches = TIMES_LIST.filter(
-        ({ value }) =>
-          value.match(re2) && isValidTime(value, validFrom, validTill, time)
+        ({ value }) => value.match(re2) && isValidTimeWrapper(value)
       );
       if (!matches.length && hr && mi && mi.length === 2) {
         if (me && /^[AaPp]/.test(me)) {
           const value = `${hr}:${mi} ${/^[Aa]/.test(me) ? 'am' : 'pm'}`;
-          if (isValidTime(value, validFrom, validTill, time))
+          if (isValidTimeWrapper(value))
             matches.push({
               key: 'time48',
               value,
@@ -73,7 +71,7 @@ const TimePicker = ({ time, validFrom, validTill, onChange }) => {
         } else {
           ['am', 'pm'].forEach((m) => {
             const value = `${hr}:${mi} ${m}`;
-            if (isValidTime(value, validFrom, validTill, time))
+            if (isValidTimeWrapper(value))
               matches.push({
                 key: `time48${m}`,
                 value,
@@ -85,14 +83,17 @@ const TimePicker = ({ time, validFrom, validTill, onChange }) => {
     }
   }, [filter]);
 
-  const clickHandler = useCallback((e, t) => {
-    e.stopPropagation();
-    const { hr, mi } = getHourMinuteFromTimeString(t);
-    if (!isHourMinuteNumbers(hr, mi)) return;
-    if (onChange) onChange(normalizedDateTime(time, hr, mi));
-    setOpened(false);
-    setFilter('');
-  }, []);
+  const clickHandler = useCallback(
+    (e, t) => {
+      e.stopPropagation();
+      const { hr, mi } = getHourMinuteFromTimeString(t);
+      if (!isHourMinuteNumbers(hr, mi)) return;
+      if (onChange) onChange(normalizedDateTime(time, hr, mi));
+      setOpened(false);
+      setFilter('');
+    },
+    [time]
+  );
 
   const changeHandler = useCallback((_, o) => {
     if (!o) setFilter('');
@@ -138,7 +139,7 @@ const TimePicker = ({ time, validFrom, validTill, onChange }) => {
               <ListItem key={key}>
                 <Button
                   className={styles['time-list-item']}
-                  type={Button.TYPE.PLAIN}
+                  variant={Button.VARIANT.TERTIARY}
                   onClick={(e) => clickHandler(e, value)}
                 >
                   {value}

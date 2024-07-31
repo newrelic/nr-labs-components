@@ -56,7 +56,7 @@ const DatePicker = ({ date, validFrom, onChange }) => {
 
       setOpened(false);
     },
-    [current]
+    [current, date, validFrom]
   );
 
   const changeHandler = useCallback((_, o) => setOpened(o), []);

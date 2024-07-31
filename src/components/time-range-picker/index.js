@@ -39,7 +39,8 @@ const TIME_RANGES = [
   { break: true },
 ];
 
-const normalizedDateTime = (dt = new Date()) => new Date(dt.setSeconds(0, 0));
+const dateTimeSecondsZeroed = (dt) =>
+  new Date((dt || new Date()).setSeconds(0, 0));
 
 const formattedText = (num, txt) => {
   if (!num || !txt) return '';
@@ -168,10 +169,10 @@ const TimeRangePicker = ({
         setBeginTime(timeRange['begin_time']);
         setEndTime(timeRange['end_time']);
       } else {
-        const thirtyMinsAgo = new Date();
-        thirtyMinsAgo.setMinutes(thirtyMinsAgo.getMinutes() - 30);
-        setEndTime(normalizedDateTime());
-        setBeginTime(normalizedDateTime(thirtyMinsAgo));
+        const now = dateTimeSecondsZeroed();
+        const thirtyMinsAgo = new Date(now.getTime() - 1800000);
+        setEndTime(now);
+        setBeginTime(thirtyMinsAgo);
       }
     }
     setIsCustomOpen((c) => !c);
@@ -197,7 +198,7 @@ const TimeRangePicker = ({
       <PopoverTrigger>
         <Button
           className={styles['time-range-picker-button']}
-          type={Button.TYPE.PLAIN}
+          variant={Button.VARIANT.TERTIARY}
           sizeType={Button.SIZE_TYPE.SMALL}
         >
           <Icon type={Icon.TYPE.DATE_AND_TIME__DATE_AND_TIME__TIME} />
@@ -224,7 +225,7 @@ const TimeRangePicker = ({
                     className={`${styles['time-range-list-item']} ${
                       tr.label === selected ? styles.open : ''
                     }`}
-                    type={Button.TYPE.PLAIN}
+                    variant={Button.VARIANT.TERTIARY}
                     onClick={() => setDurationHandler(tr.offset)}
                   >
                     {tr.label}
@@ -239,7 +240,7 @@ const TimeRangePicker = ({
                 } ${
                   isCustomOpen || selected === TEXTS.CUSTOM ? styles.open : ''
                 }`}
-                type={Button.TYPE.PLAIN}
+                variant={Button.VARIANT.TERTIARY}
                 onClick={toggleCustomHandler}
               >
                 {TEXTS.CUSTOM}
@@ -262,7 +263,7 @@ const TimeRangePicker = ({
                     datetime={endTime}
                     onChange={setEndTime}
                     validFrom={beginTime}
-                    validTill={normalizedDateTime()}
+                    validTill={dateTimeSecondsZeroed()}
                   />
                   <div className={styles['custom-buttons']}>
                     <Tooltip
@@ -273,7 +274,7 @@ const TimeRangePicker = ({
                       }
                     >
                       <Button
-                        type={Button.TYPE.PRIMARY}
+                        variant={Button.VARIANT.PRIMARY}
                         sizeType={Button.SIZE_TYPE.SMALL}
                         disabled={customSaveDisabled}
                         onClick={setCustomHandler}
@@ -282,7 +283,7 @@ const TimeRangePicker = ({
                       </Button>
                     </Tooltip>
                     <Button
-                      type={Button.TYPE.PLAIN}
+                      variant={Button.VARIANT.TERTIARY}
                       sizeType={Button.SIZE_TYPE.SMALL}
                       onClick={cancelCustomHandler}
                     >
