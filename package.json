@@ -1,6 +1,6 @@
 {
   "name": "@newrelic/nr-labs-components",
-  "version": "1.23.0",
+  "version": "1.23.1",
   "description": "New Relic Labs components",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
