@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- TimeRangePicker - custom date/times get set to blank on closing custom section
+- TimePicker - changing start time does not update list of times in dropdown 
+
 ## [1.23.1] - 2024-07-31
 
 ### Fixed

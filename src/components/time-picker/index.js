@@ -38,8 +38,10 @@ const TimePicker = ({ time, validFrom, validTill, onChange }) => {
   const [filter, setFilter] = useState('');
   const [times, setTimes] = useState([]);
 
-  const isValidTimeWrapper = (ts) =>
-    isValidTime(ts, validFrom, validTill, time);
+  const isValidTimeWrapper = useCallback(
+    (ts) => isValidTime(ts, validFrom, validTill, time),
+    [time, validFrom, validTill]
+  );
 
   useEffect(() => {
     if (!filter) {
@@ -81,7 +83,7 @@ const TimePicker = ({ time, validFrom, validTill, onChange }) => {
       }
       setTimes(matches);
     }
-  }, [filter]);
+  }, [filter, isValidTimeWrapper]);
 
   const clickHandler = useCallback(
     (e, t) => {
