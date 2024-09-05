@@ -154,16 +154,20 @@ const TimeRangePicker = ({
     setIsCustomOpen(false);
   };
 
-  const changeHandler = useCallback((_, o) => {
-    if (!o) {
-      setBeginTime(null);
-      setEndTime(null);
-      setIsCustomOpen(false);
-    }
-    setOpened(o);
-  }, []);
+  const changeHandler = useCallback(
+    (_, o) => {
+      if (!o && selected !== TEXTS.CUSTOM) {
+        setBeginTime(null);
+        setEndTime(null);
+        setIsCustomOpen(false);
+      }
+      setOpened(o);
+    },
+    [selected]
+  );
 
   const toggleCustomHandler = () => {
+    if (selected === TEXTS.CUSTOM && isCustomOpen) return;
     if (!isCustomOpen) {
       if (timeRange && timeRange['begin_time'] && timeRange['end_time']) {
         setBeginTime(timeRange['begin_time']);
@@ -189,6 +193,7 @@ const TimeRangePicker = ({
   }, [beginTime, endTime]);
 
   const cancelCustomHandler = useCallback((e) => {
+    e.preventDefault();
     e.stopPropagation();
     setIsCustomOpen(false);
   }, []);
@@ -285,6 +290,7 @@ const TimeRangePicker = ({
                     <Button
                       variant={Button.VARIANT.TERTIARY}
                       sizeType={Button.SIZE_TYPE.SMALL}
+                      disabled={selected === TEXTS.CUSTOM}
                       onClick={cancelCustomHandler}
                     >
                       {TEXTS.CANCEL}
