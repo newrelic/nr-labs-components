@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- NrqlEditor - replace existing editor with react-simple-code-editor 
+
 ## [1.23.2] - 2024-09-05
 
 ### Fixed

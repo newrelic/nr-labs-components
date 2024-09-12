@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { AccountPicker } from 'nr1';
+import Editor from 'react-simple-code-editor';
 
 import patterns from './patterns';
 
@@ -33,35 +34,14 @@ const NrqlEditor = ({
 }) => {
   const [nrql, setNrql] = useState('');
   const [selectedAccountId, setSelectedAccountId] = useState();
-  const [displayNode, setDisplayNode] = useState();
 
   useEffect(() => setSelectedAccountId(accountId), [accountId]);
 
   useEffect(() => setNrql(query), [query]);
 
-  const scrollHandler = useCallback(
-    ({ target: { scrollTop = 0 } = {} } = {}) => {
-      if (displayNode) displayNode.scrollTop = scrollTop;
-    },
-    [displayNode]
-  );
-
-  const displayNodeHandler = useCallback((node) => setDisplayNode(node), []);
-
   const saveHandler = useCallback(() => {
     if (onSave) onSave({ query: nrql, accountId: selectedAccountId });
   }, [nrql, selectedAccountId, onSave]);
-
-  const keyDownHandler = useCallback(
-    (e) => {
-      const { keyCode, shiftKey } = e;
-      if (keyCode === 13 && !shiftKey) {
-        e.preventDefault();
-        saveHandler();
-      }
-    },
-    [saveHandler]
-  );
 
   return (
     <div className={styles['nrql-editor']}>
@@ -72,20 +52,20 @@ const NrqlEditor = ({
         />
       </div>
       <div className={styles['color-coded-nrql']}>
-        <div className={styles.editor}>
-          <textarea
-            className={`u-unstyledInput ${styles.entry}`}
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck="false"
+        <div>
+          <Editor
             value={nrql}
-            onChange={({ target: { value } = {} } = {}) => setNrql(value)}
-            onScroll={scrollHandler}
-            onKeyDown={keyDownHandler}
+            onValueChange={(code) => setNrql(code)}
+            highlight={(code) => lexer(code)}
+            textareaClassName="u-unstyledInput"
+            padding={8}
+            style={{
+              fontFamily: 'monospace',
+              fontSize: 16,
+              color: '#E9ECEC',
+              lineHeight: '19px',
+            }}
           />
-          <pre ref={displayNodeHandler} className={styles.display}>
-            <code dangerouslySetInnerHTML={{ __html: lexer(nrql) }} />
-          </pre>
         </div>
       </div>
       <div className={styles.actions}>
