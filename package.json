@@ -67,6 +67,7 @@
     "sass": "^1.57.1"
   },
   "dependencies": {
-    "dayjs": "^1.11.7"
+    "dayjs": "^1.11.7",
+    "react-simple-code-editor": "^0.14.1"
   }
 }
