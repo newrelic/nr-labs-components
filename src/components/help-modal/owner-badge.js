@@ -13,26 +13,28 @@ const OwnerBadge = ({ logo, blurb, className, style, loading, setLoading }) => {
       style={getStyles(className, style, {
         marginTop: '10%',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
       })}
     >
-      <img
-        className={logo.className}
-        style={getStyles(logo.className, logo.style, {
-          height: '65px'
-        })}
-        src={logo.src}
-        alt={logo.alt}
-        onLoad={() => setLoading(false)}
-        onError={() => setLoading(false)}
-      />
-      {!loading && (
+      {logo && (
+        <img
+          className={logo.className}
+          style={getStyles(logo.className, logo.style, {
+            height: '65px',
+          })}
+          src={logo.src}
+          alt={logo.alt}
+          onLoad={() => setLoading(false)}
+          onError={() => setLoading(false)}
+        />
+      )}
+      {!loading && blurb && (
         <div
           className={blurb.className}
           style={getStyles(blurb.className, blurb.style, {
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'start'
+            alignItems: 'start',
           })}
         >
           <BlockText>{blurb.text}</BlockText>
@@ -48,21 +50,21 @@ OwnerBadge.propTypes = {
     src: PropTypes.string,
     alt: PropTypes.string,
     style: PropTypes.object,
-    className: PropTypes.string
+    className: PropTypes.string,
   }),
   blurb: PropTypes.shape({
     text: PropTypes.string,
     link: PropTypes.shape({
       text: PropTypes.string,
-      url: PropTypes.string
+      url: PropTypes.string,
     }),
     style: PropTypes.object,
-    className: PropTypes.string
+    className: PropTypes.string,
   }),
   style: PropTypes.object,
   className: PropTypes.string,
   loading: PropTypes.bool,
-  setLoading: PropTypes.func
+  setLoading: PropTypes.func,
 };
 
 export default OwnerBadge;
