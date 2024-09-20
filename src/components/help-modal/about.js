@@ -23,8 +23,8 @@ About.propTypes = {
   blurb: PropTypes.string.isRequired,
   moreInfo: PropTypes.shape({
     link: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired
-  })
+    text: PropTypes.string.isRequired,
+  }),
 };
 
 export default About;

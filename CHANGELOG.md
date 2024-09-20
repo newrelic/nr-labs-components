@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.23.4] - 2024-09-20
+
+### Fixed
+
+- HelpModal - fixes an issue on missing `ownerBadge` config
+
 ## [1.23.3] - 2024-09-12
 
 ### Changed
