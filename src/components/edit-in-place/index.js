@@ -75,7 +75,7 @@ const EditInPlace = forwardRef(
     const keyDownHandler = useCallback((evt) => {
       const { ctrlKey, metaKey, keyCode } = evt;
       // save on enter
-      if (keyCode === 13) {
+      if (!evt?.nativeEvent?.isComposing && keyCode === 13) {
         evt.preventDefault();
         editableRef.current.blur();
       }
