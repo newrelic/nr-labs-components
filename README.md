@@ -50,7 +50,7 @@ A NRQL editor in the browser.
 Displays a status icon.
 
 ### [StatusIconsLayout](src/components/status-icons-layout)
-A layout component for `StatusIcon`
+A layout component for `StatusIcon`.
 
 ### [ProgressBar](src/components/progress-bar)
 A component that renders a progress bar.
