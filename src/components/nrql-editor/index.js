@@ -51,7 +51,7 @@ const NrqlEditor = ({
         saveHandler();
       }
     },
-    [nrql, selectedAccountId, onSave]
+    [saveHandler]
   );
 
   return (
