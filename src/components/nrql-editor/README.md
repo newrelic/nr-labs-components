@@ -16,10 +16,11 @@ Use the component in your code:
 
 ```jsx
 <NrqlEditor 
-  query="SELECT count(*) FROM Transaction FACET appName" 
+  query="SELECT count(*) FROM Transaction FACET appName"
   accountId={0}
-  onSave={res => console.log('onSave response', res)} 
-  saveButtonText="Preview" 
+  onSave={res => console.log('onSave response', res)}
+  placeholder="NRQL query goes here"
+  saveButtonText="Preview"
 />
 ```
 
@@ -28,6 +29,7 @@ Use the component in your code:
 - `query` (string) - the initial query to be displayed and edited (default is `SELECT * FROM Transaction`)
 - `accountId` (numeric) - the default account id for the account picker
 - `onSave` (function) - a callback function that will be called when a user saves their changes
+= `placeholder` (string) - placeholder text
 - `saveButtonText` (string) - the text to display for the save button (default is `Run`)
 
 ## Return value
@@ -56,8 +58,9 @@ function MyComponent() {
       <NrqlEditor 
         query={queryObject.query}
         accountId={queryObject.accountId}
-        onSave={({ query, accountId }) => setQueryObject({ query, accountId })} 
-        saveButtonText="Save" 
+        onSave={({ query, accountId }) => setQueryObject({ query, accountId })}
+        placeholder="Enter a NRQL query..."
+        saveButtonText="Save"
       />
     </div>
   );
