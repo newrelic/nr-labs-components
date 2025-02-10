@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.23.5] - 2024-10-29
+
 ### Fixed
 
 - EditInPlace - prevents save when in composition session
