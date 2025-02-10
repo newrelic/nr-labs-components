@@ -27,9 +27,10 @@ const lexer = (nrql) =>
   );
 
 const NrqlEditor = ({
-  query = 'SELECT * FROM Transaction',
+  query = '',
   accountId,
   onSave,
+  placeholder,
   saveButtonText = 'Run',
 }) => {
   const [nrql, setNrql] = useState('');
@@ -42,6 +43,16 @@ const NrqlEditor = ({
   const saveHandler = useCallback(() => {
     if (onSave) onSave({ query: nrql, accountId: selectedAccountId });
   }, [nrql, selectedAccountId, onSave]);
+
+  const keyDownHandler = useCallback(
+    (e) => {
+      if (e?.keyCode === 13) {
+        e.preventDefault();
+        saveHandler();
+      }
+    },
+    [saveHandler]
+  );
 
   return (
     <div className={styles['nrql-editor']}>
@@ -56,7 +67,9 @@ const NrqlEditor = ({
           <Editor
             value={nrql}
             onValueChange={(code) => setNrql(code)}
+            onKeyDown={keyDownHandler}
             highlight={(code) => lexer(code)}
+            placeholder={placeholder}
             textareaClassName="u-unstyledInput"
             padding={8}
             style={{
@@ -84,6 +97,7 @@ NrqlEditor.propTypes = {
   query: PropTypes.string,
   accountId: PropTypes.number,
   onSave: PropTypes.func,
+  placeholder: PropTypes.string,
   saveButtonText: PropTypes.string,
 };
 

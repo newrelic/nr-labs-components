@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- NrqlEditor - `enter` key would not trigger `onSave`
+
+### Added
+
+- NrqlEditor - `placeholder` prop for placeholder text
+
+## [1.23.5] - 2024-10-29
+
+### Fixed
+
 - EditInPlace - prevents save when in composition session
 
 ## [1.23.4] - 2024-09-20
