@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { AccountPicker } from 'nr1';
 import Editor from 'react-simple-code-editor';
 
 import patterns from './patterns';
@@ -29,16 +28,32 @@ const lexer = (nrql) =>
 const NrqlEditor = ({
   query = '',
   accountId,
+  accounts,
   onSave,
   placeholder,
   saveButtonText = 'Run',
 }) => {
   const [nrql, setNrql] = useState('');
   const [selectedAccountId, setSelectedAccountId] = useState();
+  const [selectOptions, setSelectOptions] = useState([]);
 
   useEffect(() => setSelectedAccountId(accountId), [accountId]);
 
   useEffect(() => setNrql(query), [query]);
+
+  useEffect(
+    () =>
+      setSelectOptions(
+        accounts.reduce(
+          (acc, { value, ...acct }) =>
+            value !== null && value !== undefined
+              ? [...acc, { ...acct, value, __selStrVal: String(value) }]
+              : acc,
+          []
+        )
+      ),
+    [accounts]
+  );
 
   const saveHandler = useCallback(() => {
     if (onSave) onSave({ query: nrql, accountId: selectedAccountId });
@@ -54,14 +69,32 @@ const NrqlEditor = ({
     [saveHandler]
   );
 
+  const accountChangeHandler = useCallback(
+    ({ target: { value } = {} } = {}) => {
+      const selectedAccount = selectOptions.find(
+        ({ __selStrVal }) => __selStrVal === value
+      );
+      if (selectedAccount) setSelectedAccountId(selectedAccount.value);
+    },
+    [selectOptions]
+  );
+
   return (
     <div className={styles['nrql-editor']}>
-      <div className={styles['account-picker']}>
-        <AccountPicker
-          value={selectedAccountId}
-          onChange={(_, value) => setSelectedAccountId(value)}
-        />
-      </div>
+      {selectOptions?.length ? (
+        <div className={styles['account-picker']}>
+          <select
+            value={String(selectedAccountId)}
+            onChange={accountChangeHandler}
+          >
+            {selectOptions.map(({ __selStrVal, label }) => (
+              <option key={__selStrVal} value={__selStrVal}>
+                {label || __selStrVal}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
       <div className={styles['color-coded-nrql']}>
         <div>
           <Editor
@@ -96,6 +129,12 @@ const NrqlEditor = ({
 NrqlEditor.propTypes = {
   query: PropTypes.string,
   accountId: PropTypes.number,
+  accounts: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      label: PropTypes.string,
+    })
+  ),
   onSave: PropTypes.func,
   placeholder: PropTypes.string,
   saveButtonText: PropTypes.string,
