@@ -27,13 +27,17 @@ $default-line-height: 19px;
   width: 200px;
   padding: 8px;
 
-  button {
+  select, button {
     background-color: $select-back;
     color: $normal;
     box-shadow: none;
     svg {
       fill: #FFFFFF;
     }
+  }
+
+  select {
+    left: 0;
   }
 }
 
