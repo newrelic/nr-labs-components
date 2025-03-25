@@ -25,10 +25,10 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
     [metric.previousValue]
   );
 
-  const difference = useMemo(
+  const percentChange = useMemo(
     () =>
       typeof metricValue === 'number' && typeof metricPreviousValue === 'number'
-        ? metricValue - metricPreviousValue
+        ? ((metricValue - metricPreviousValue) / metricPreviousValue) * 100
         : 0,
     [metricValue, metricPreviousValue]
   );
@@ -51,15 +51,13 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
   }, [metricValue, metricPreviousValue]);
 
   const changeStatus = useMemo(() => {
-    if (difference === 0) return null;
+    if (percentChange === 0) return null;
     const icons = {
       uparrow: <polygon points="8,0 0,16 16,16" />,
       downarrow: <polygon points="0,0 16,0 8,16" />,
     };
     const icon =
-      difference > 0
-        ? { type: 'uparrow', }
-        : { type: 'downarrow', };
+      percentChange > 0 ? { type: 'uparrow' } : { type: 'downarrow' };
 
     return (
       <svg
@@ -75,7 +73,7 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
         {icons[icon.type]}
       </svg>
     );
-  }, [difference]);
+  }, [percentChange]);
 
   return (
     <div className="simple-billboard">
@@ -87,6 +85,13 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
       >
         {`${metric.prefix || ''} ${formattedValue} ${metric.suffix || ''}`}
         <span>{changeStatus}</span>
+        {percentChange === 0 || isNaN(percentChange) ? null : (
+          <span
+            className={`metric-color metric-compare-value ${
+              metric.className || ''
+            }`}
+          >{`${Math.abs(percentChange).toFixed(1)}%`}</span>
+        )}
       </div>
 
       {title.toolTip ? (
