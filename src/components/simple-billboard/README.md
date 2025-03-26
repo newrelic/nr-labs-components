@@ -32,22 +32,23 @@ and the code snippet to use the component:
 ```js
     SimpleBillboard.propTypes = {
       metric: PropTypes.shape({
-        value: PropTypes.number,           // required - metric value
-        previousValue: PropTypes.number,   // optional - value for a different time window for comparison
-        prefix: PropTypes.string,          // optional - metric prefix (i.e. '$')
-        suffix: PropTypes.string,          // optional - metric suffix
-        className: PropTypes.string,       // optional - SCSS class name - gets appended to existing JSX classes for displaying the metric value
-        style: PropTypes.object,           // optional - SCSS style - gets added to JSX for metric value
+        value: PropTypes.number,            // required - metric value
+        previousValue: PropTypes.number,    // optional - value for a different time window for comparison
+        prefix: PropTypes.string,           // optional - metric prefix (i.e. '$')
+        suffix: PropTypes.string,           // optional - metric suffix
+        className: PropTypes.string,        // optional - SCSS class name - gets appended to existing JSX classes for displaying the metric value
+        compareClassName: PropTypes.string, // optional - SCSS class name - gets appended to existing JSX classes for displaying the metric compare with percent difference
+        style: PropTypes.object,            // optional - SCSS style - gets added to JSX for metric value
       }),
       statusTrend: PropTypes.shape({
-        className: PropTypes.string,       // optional - SCSS class name for trend icon
-        style: PropTypes.object,           // optional - SCSS style for trend icon
+        className: PropTypes.string,        // optional - SCSS class name for trend icon
+        style: PropTypes.object,            // optional - SCSS style for trend icon
       }),
       title: PropTypes.shape({
-        name: PropTypes.string,            // required - metric name
-        style: PropTypes.object,           // optional - SCSS class name for metric name
-        className: PropTypes.string,       // optional - SCSS style for metric name
-        toolTip: PropTypes.bool            // optional - enable tool tip for metric name (default: false)
+        name: PropTypes.string,             // required - metric name
+        style: PropTypes.object,            // optional - SCSS class name for metric name
+        className: PropTypes.string,        // optional - SCSS style for metric name
+        toolTip: PropTypes.bool             // optional - enable tool tip for metric name (default: false)
       }),
     };
 ```
@@ -60,7 +61,7 @@ Required attributes:
 ```
 
 - At a minimum `SimpleBillboard` component requires the metric name and a single value to show on the billboard.
-- If you also pass a `previousValue` attribute to SimpleBillboard, it compares the 2 values and shows an up/down trend.
+- If you also pass a `previousValue` attribute to SimpleBillboard, it compares the 2 values and shows an up/down trend, as well as the percent difference between the two values.
 
 ## Examples
 
@@ -109,7 +110,8 @@ const Nerdlet = (props) => {
           previousValue: props.metric.previousValue,
           prefix: props.metric.prefix,
           suffix: props.metric.suffix,
-          className: props.metric..className,
+          className: props.metric.className,
+          compareClassName: props.metric.compareClassName,
           style: {color: props.metric.value > props.metric.previousValue ? 'blue' : 'red'},
         }}
         statusTred={{
