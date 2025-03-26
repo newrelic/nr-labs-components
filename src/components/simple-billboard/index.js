@@ -87,9 +87,9 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
         <span>{changeStatus}</span>
         {percentChange === 0 || isNaN(percentChange) ? null : (
           <span
-            className={`metric-color metric-compare-value ${
-              metric.compareClassName || ''
-            }`}
+            className={`${styles['metric-color']} ${
+              styles['metric-compare-value']
+            } ${metric.compareClassName || ''}`}
           >{`${Math.abs(percentChange).toFixed(1)}%`}</span>
         )}
       </div>
