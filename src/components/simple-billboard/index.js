@@ -6,7 +6,7 @@ import { Tooltip } from 'nr1';
 import styles from './styles.scss';
 
 /**
- * @param {Object} metric - metric value, previousValue, optional: prefix, suffix, className, style
+ * @param {Object} metric - metric value, previousValue, optional: prefix, suffix, className, compareClassName, style
  * @param {Object} statusTrend - optional: className, style
  * @param {Object} title - metric name, optional: className, style, toolTip
  * @return {JSX Object} - RENDERING name, value, up/down trend when previousValue present
@@ -88,7 +88,7 @@ const SimpleBillboard = ({ metric, statusTrend = {}, title }) => {
         {percentChange === 0 || isNaN(percentChange) ? null : (
           <span
             className={`metric-color metric-compare-value ${
-              metric.className || ''
+              metric.compareClassName || ''
             }`}
           >{`${Math.abs(percentChange).toFixed(1)}%`}</span>
         )}
@@ -126,6 +126,7 @@ SimpleBillboard.propTypes = {
     prefix: PropTypes.string,
     suffix: PropTypes.string,
     className: PropTypes.string,
+    compareClassName: PropTypes.string,
     style: PropTypes.object,
   }),
   statusTrend: PropTypes.shape({
