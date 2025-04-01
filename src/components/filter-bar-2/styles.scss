@@ -1,0 +1,64 @@
+.filter-bar {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  background-color: #f3f4f4;
+  padding: 4px;
+  border-radius: 4px;
+
+  .filter-block {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    background-color: #e1edff;
+    color: #074382;
+
+    .filter-token, .del-btn {
+      padding: 4px;
+      position: relative;
+
+      &:first-of-type {
+        border-radius: 4px 0 0 4px;
+      }
+
+      &:last-of-type {
+        border-radius: 0 4px 4px 0;
+      }
+
+      &:not(:first-child) {
+        cursor: pointer;
+      }
+
+      &:not(:first-child):hover, &.is-editing {
+        background-color: #a4d1fc;
+      }
+    }
+  }
+
+  .filter-conjunction {
+    padding: 3px;
+    cursor: pointer;
+    position: relative;
+    background-color: transparent;
+    border: 1px solid #cdd3d5;
+    border-radius: 4px;
+  }
+
+  .filter-entry {
+    flex-grow: 1;
+    position: relative;
+
+    .filter-input {
+      flex-grow: 1;
+    }
+
+    input:not([type=checkbox]) {
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+  }
+}

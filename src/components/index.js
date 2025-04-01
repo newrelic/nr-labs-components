@@ -12,3 +12,4 @@ export { default as DatePicker } from './date-picker';
 export { default as TimePicker } from './time-picker';
 export { default as DateTimePicker } from './date-time-picker';
 export { default as TimeRangePicker } from './time-range-picker';
+export { default as FilterBar2 } from './filter-bar-2';
