@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- FilterBar2 component by [@amit-y](https://github.com/amit-y)
+
+## [1.23.10] - 2025-03-26
+
+### Fixed
+
+- SimpleBillboard - styling for compare
+
+## [1.23.9] - 2025-03-26
+
+### Fixed
+
+- SimpleBillboard - update prop name for compare class
+
+## [1.23.8] - 2025-03-25
+
+### Added
+
+- SimpleBillboard - added compare
+
+## [1.23.7] - 2025-02-11
+
 ### Changed
 
 - NrqlEditor - change account picker to use select element
