@@ -15,10 +15,12 @@
     box-shadow: 0 1px 0 0 #e7e9ea !important;
     padding: 4px 0;
 
-    input {
-      min-width: calc(28px + 26ch);
-      background-color: transparent !important;
-      box-shadow: none !important;
+    .search-input {
+      input {
+        min-width: calc(28px + 26ch);
+        background-color: transparent !important;
+        box-shadow: none !important;
+      }
     }
   }
 

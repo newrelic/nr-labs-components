@@ -77,7 +77,7 @@ const Dropdown = ({
           />
         </div>
       ) : null}
-      <div className="dropdown-items">
+      <div className={styles['dropdown-items']}>
         {filteredItems.map((item) =>
           isMultiple ? (
             <div key={item.index} className={styles['dropdown-item']}>
