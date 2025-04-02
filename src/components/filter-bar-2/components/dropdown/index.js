@@ -65,7 +65,7 @@ const Dropdown = ({
   if (!items?.length) return null;
 
   return (
-    <div className={styles['dropdown-list']}>
+    <div className={styles['filter-dropdown']}>
       {hasSearch ? (
         <div className={styles['items-search']}>
           <TextField
@@ -77,30 +77,32 @@ const Dropdown = ({
           />
         </div>
       ) : null}
-      {filteredItems.map((item) =>
-        isMultiple ? (
-          <div key={item.index} className={styles['dropdown-item']}>
-            <Checkbox
-              checked={isSelected(item.value)}
-              onChange={({ target: { checked = false } = {} } = {}) =>
-                checkedHandler(item.value, checked)
-              }
-              label={item.value}
-              name={item.value}
-            />
-          </div>
-        ) : (
-          <div
-            key={item.index}
-            className={`${styles['dropdown-item']} ${
-              isSelected(item.value) ? styles['highlighted'] : ''
-            }`}
-            onClick={(e) => clickHandler(e, item)}
-          >
-            {item.value}
-          </div>
-        )
-      )}
+      <div className={styles['dropdown-items']}>
+        {filteredItems.map((item) =>
+          isMultiple ? (
+            <div key={item.index} className={styles['dropdown-item']}>
+              <Checkbox
+                checked={isSelected(item.value)}
+                onChange={({ target: { checked = false } = {} } = {}) =>
+                  checkedHandler(item.value, checked)
+                }
+                label={item.value}
+                name={item.value}
+              />
+            </div>
+          ) : (
+            <div
+              key={item.index}
+              className={`${styles['dropdown-item']} ${
+                isSelected(item.value) ? styles['highlighted'] : ''
+              }`}
+              onClick={(e) => clickHandler(e, item)}
+            >
+              {item.value}
+            </div>
+          )
+        )}
+      </div>
     </div>
   );
 };
