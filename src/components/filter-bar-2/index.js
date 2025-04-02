@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import { Icon } from 'nr1';
+import { Button, Icon } from 'nr1';
 
 import { Dropdown } from './components';
 
@@ -33,7 +33,6 @@ const formatDropdownItems = (items) =>
   items?.map((value, index) => ({ value, index })) || [];
 
 const FilterBar2 = ({ options = [], onChange }) => {
-  const [inputText] = useState('');
   const [filters, setFilters] = useState([]);
   const [editingFilterIndex, setEditingFilterIndex] = useState(-1);
   const filterRef = useRef(null);
@@ -228,12 +227,11 @@ const FilterBar2 = ({ options = [], onChange }) => {
     <div className={styles['filter-bar']} ref={filterRef}>
       {displayFilters}
       <div className={styles['filter-entry']}>
-        <input
-          className={styles['filter-input']}
-          placeholder="Click to filter"
-          value={inputText}
-          onChange={null}
-          onFocus={() => setEditingFilterIndex(filters.length)}
+        <Button
+          iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+          sizeType={Button.SIZE_TYPE.SMALL}
+          ariaLabel="Click to filter"
+          onClick={() => setEditingFilterIndex(filters.length)}
         />
         {editingFilterIndex === filters.length ? (
           <Dropdown

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- FilterBar2 - use button to add new filters and other styling changes
+
 ## [1.24.0] - 2025-04-01
 
 ### Added
