@@ -103,7 +103,8 @@ const FilterBar2 = ({ options = [], onChange }) => {
   );
 
   useEffect(() => {
-    const filterSets = [];
+    const filterStr = [],
+      filtersArr = [];
     for (let i = 0; i < filters.length; i += 4) {
       const filterGroup = filters.slice(i, i + 4);
 
@@ -113,24 +114,46 @@ const FilterBar2 = ({ options = [], onChange }) => {
         const { value: val, values: vals } = filterGroup[2];
         let groupStr = `${key} ${op}`;
         const delim = type === 'string' ? "'" : '';
+        const filterObj = { type, key, operator: op, values: [] };
+        let valsArr = [];
         if (isMultiple(op)) {
-          const valStr =
-            vals?.map((v) => v.value)?.join(`${delim}, ${delim}`) || val || '';
+          let valStr;
+          if (vals && Array.isArray(vals)) {
+            valsArr = [...new Set(vals.map((v) => v.value))];
+            valStr = valsArr.join(`${delim}, ${delim}`);
+          } else {
+            valStr = val || '';
+            valsArr = [valStr];
+          }
           groupStr = `${groupStr} (${delim}${valStr}${delim})`;
         } else {
           const valStr = val || vals?.[0]?.value || '';
           groupStr = `${groupStr} ${delim}${valStr}${delim}`;
+          valsArr = [valStr];
         }
-        if (filterGroup.length === 4 && filters.length % 4 === 3) {
-          groupStr = `${groupStr} ${filterGroup[3].value}`;
+        filterObj.values = valsArr.reduce((acc, v) => {
+          if (type === 'numeric') {
+            if (Number.isNaN(v)) return acc;
+            return [...acc, Number(v)];
+          }
+          if (type === 'boolean') return [...acc, v === 'true'];
+          return [...acc, v];
+        }, []);
+        if (filterGroup.length === 4 && filters.length > i + 6) {
+          const { value: conj = '' } = filterGroup[3] || {};
+          groupStr = `${groupStr} ${conj}`;
+          if (conj) {
+            filterObj.conjunction = conj;
+          }
         }
-        filterSets.push(groupStr);
+        filterStr.push(groupStr);
+        filtersArr.push(filterObj);
       }
     }
-    const filterString = filterSets.join(' ');
+    const filterString = filterStr.join(' ');
     if (onChange && filterString !== prevFilterString.current) {
       prevFilterString.current = filterString;
-      onChange(filterString);
+      onChange(filterString, filtersArr);
     }
   }, [filters, onChange]);
 

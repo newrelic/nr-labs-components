@@ -17,7 +17,7 @@ Use the component in your code:
 ```jsx
 <FilterBar2
   options={optionsArray}
-  onChange={(whereClause) => fnToHandleChange(whereClause)}
+  onChange={(whereClause, filtersArray) => fnToHandleChange(whereClause)}
 />
 ```
 
@@ -26,7 +26,7 @@ Use the component in your code:
 The FilterBar component accepts the following props:
 
 - `options` (array) - an array of option objects. See below for object properties.
-- `onChange` (function) - a callback function that receives a string formatted as WHERE clauses for a NRQL query.
+- `onChange` (function) - a callback function that receives a string formatted as WHERE clauses for a NRQL query, and an array of the selected filters.
 
 #### `options` object
 
