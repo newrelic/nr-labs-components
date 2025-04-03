@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- FilterBar2 - return an array of filters too in the onChange function
+
+## [1.24.1] - 2025-04-02
+
+### Changed
+
 - FilterBar2 - use button to add new filters and other styling changes
 
 ## [1.24.0] - 2025-04-01
