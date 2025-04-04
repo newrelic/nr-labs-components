@@ -61,7 +61,7 @@ const NrqlEditor = ({
 
   const keyDownHandler = useCallback(
     (e) => {
-      if (e?.keyCode === 13) {
+      if (e?.keyCode === 13 && !e?.shiftKey) {
         e.preventDefault();
         saveHandler();
       }
