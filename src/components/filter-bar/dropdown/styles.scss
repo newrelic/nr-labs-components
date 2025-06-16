@@ -33,6 +33,9 @@
     .dropdown-item {
       cursor: pointer;
       padding: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
 
       &:first-of-type {
         border-radius: 4px 4px 0 0;

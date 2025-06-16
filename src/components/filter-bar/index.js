@@ -1,552 +1,461 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
-import { Spinner } from 'nr1';
+import { Button, Icon } from 'nr1';
 
-import { CloseIcon, FilterByIcon, OpenIcon, SearchIcon } from './icons';
-import { Conjunction, Label, Value } from './components';
-import {
-  generateFilterString,
-  optionsReducer,
-  queryStringFromSelectedOption,
-  textMatchObject,
-  valueObject,
-} from './utils';
+import Dropdown from './dropdown';
+import { uuid } from '../../utils';
 
 import styles from './styles.scss';
 
-const FilterBar = ({ options, onChange, getValues }) => {
-  const thisComponent = useRef();
-  const inputField = useRef();
-  const [showItemsList, setShowItemsList] = useState(false);
-  const [filterItems, setFilterItems] = useState([]);
-  const [filterString, setFilterString] = useState('');
-  const [searchTexts, setSearchTexts] = useState([]);
-  const [isOptionOpen, setIsOptionOpen] = useState([]);
-  const [isOptionNotMatchArr, setIsOptionNotMatchArr] = useState([]);
-  const [isOptionDisplayed, setIsOptionDisplayed] = useState([]);
-  const [optionsLoading, setOptionsLoading] = useState([]);
-  const [optionsSearchText, setOptionsSearchText] = useState('');
-  const [values, setValues] = useState([]);
-  const [shownValues, setShownValues] = useState([]);
-  const [conjunctions, setConjunctions] = useState([]);
-  const [textMatchIsSelected, setTextMatchIsSelected] = useState([]);
-  const lastGroup = useRef('');
-  const searchTimeout = useRef();
+const FILTER_PARTS = {
+  KEY: 1,
+  OPERATOR: 2,
+  VALUES: 3,
+  CONJUNCTION: 4,
+};
 
-  const MIN_ITEMS_SHOWN = 5;
-  const MAX_DROPDOWN_WIDTH = 360;
+const FILTER_PARTS_ARR = ['key', 'operator', 'values', 'conjunction'];
 
-  useEffect(() => {
-    function handleClicksOutsideComponent(evt) {
-      if (
-        showItemsList &&
-        thisComponent &&
-        !thisComponent.current.contains(evt.target)
-      )
-        setShowItemsList(false);
-    }
-    document.addEventListener('mousedown', handleClicksOutsideComponent);
+const FILTER_PARTS_ARR_KEYS = {
+  KEY: 'key',
+  OPERATOR: 'operator',
+  VALUES: 'values',
+  CONJUNCTION: 'conjunction',
+};
 
-    return function cleanup() {
-      document.removeEventListener('mousedown', handleClicksOutsideComponent);
-    };
-  });
+const OPERATORS = {
+  string: [
+    { value: '=', label: 'Equals' },
+    { value: '!=', label: 'Not Equals' },
+    { value: 'LIKE', label: 'Contains', partialMatches: true },
+    { value: 'NOT LIKE', label: 'Not Contains', partialMatches: true },
+    { value: 'IN', label: 'Is One Of', multiValue: true },
+    { value: 'NOT IN', label: 'Is Not One Of', multiValue: true },
+    { value: 'IS NULL', label: 'Is Null', noValueNeeded: true },
+    { value: 'IS NOT NULL', label: 'Is Not Null', noValueNeeded: true },
+    { value: 'STARTS WITH', label: 'Starts With' },
+    { value: 'ENDS WITH', label: 'Ends With' },
+  ],
+  numeric: [
+    { value: '=', label: 'Equals' },
+    { value: '!=', label: 'Not Equals' },
+    { value: '>', label: 'Greater Than' },
+    { value: '<', label: 'Less Than' },
+    { value: '>=', label: 'Greater Than or Equals' },
+    { value: '<=', label: 'Less Than or Equals' },
+    { value: 'IN', label: 'Is One Of', multiValue: true },
+    { value: 'NOT IN', label: 'Is Not One Of', multiValue: true },
+    { value: 'IS NULL', label: 'Is Null', noValueNeeded: true },
+    { value: 'IS NOT NULL', label: 'Is Not Null', noValueNeeded: true },
+  ],
+  boolean: [
+    { value: '=', label: 'Is' },
+    { value: 'IS NULL', label: 'Is Null', noValueNeeded: true },
+    { value: 'IS NOT NULL', label: 'Is Not Null', noValueNeeded: true },
+  ],
+};
 
-  useEffect(() => {
-    const optionsReduction = (options || []).reduce(optionsReducer, {
-      open: [],
-      notMatchs: [],
-      displayed: [],
-      loading: [],
-      optionValues: [],
-      srchTxts: [],
-      txtMatchSelected: [],
-      fltrItems: [],
-      cnjctns: [],
-      valsShown: [],
-    });
+const CONJUNCTIONS = [
+  { value: 'AND', label: 'AND' },
+  { value: 'OR', label: 'OR' },
+];
 
-    setIsOptionOpen(optionsReduction.open || []);
-    setIsOptionNotMatchArr(optionsReduction.notMatchs || []);
-    setIsOptionDisplayed(optionsReduction.displayed || []);
-    setOptionsLoading(optionsReduction.loading || []);
-    setSearchTexts(optionsReduction.srchTxts || []);
-    setTextMatchIsSelected(optionsReduction.txtMatchSelected || []);
-    setShownValues(optionsReduction.valsShown || []);
-    setValues(optionsReduction.optionValues || []);
-    setFilterItems(optionsReduction.fltrItems || []);
-    setConjunctions(optionsReduction.cnjctns || []);
-  }, [options]);
+/* eslint-disable no-unused-vars */
+const BOOLEAN_VALUES = [
+  { value: true, label: 'True' },
+  { value: false, label: 'False' },
+];
+/* eslint-enable no-unused-vars */
 
-  useEffect(() => {
-    const fltrStr = generateFilterString(
-      filterItems,
-      conjunctions,
-      values,
-      searchTexts,
-      isOptionNotMatchArr
+const CONDITION_OBJECT = {
+  id: null,
+  key: null,
+  operator: null,
+  values: [],
+  conjunction: null,
+};
+
+const CONDITION_PARAMS = {
+  optionType: null,
+  optionIndex: -1,
+  multiValue: false,
+  noValueNeeded: false,
+  partialMatches: false,
+};
+
+const filterPartFromPart = (part) => FILTER_PARTS[part.toUpperCase()];
+
+const isValidValues = (values) => {
+  if (Array.isArray(values) && values.length === 0) return false;
+  return !!values;
+};
+
+const nextPartForCondition = ({ key, operator, values, conjunction } = {}) => {
+  if (!key) return FILTER_PARTS.KEY;
+  if (!operator) return FILTER_PARTS.OPERATOR;
+  if (operator.noValueNeeded && !conjunction) return FILTER_PARTS.CONJUNCTION;
+  if (!isValidValues(values)) return FILTER_PARTS.VALUES;
+  if (!conjunction) return FILTER_PARTS.CONJUNCTION;
+  return 0;
+};
+
+const paramsForCondition = (cond) => {
+  const optionType = cond.key?.type;
+  const optionIndex = Number.isInteger(cond.key?.index) ? cond.key.index : -1;
+  const multiValue = !!cond.operator?.multiValue;
+  const noValueNeeded = !!cond.operator?.noValueNeeded;
+  return { optionType, optionIndex, multiValue, noValueNeeded };
+};
+
+const FilterBar = forwardRef(
+  ({ options, defaultSelections = [], onChange }, ref) => {
+    const [conditions, setConditions] = useState(
+      Array.isArray(defaultSelections) ? defaultSelections : []
     );
-    if (fltrStr !== filterString) {
-      setFilterString(fltrStr);
-      if (onChange) onChange(fltrStr);
-    }
-  }, [filterItems, conjunctions, values, searchTexts, isOptionNotMatchArr]);
+    const [editingPart, setEditingPart] = useState(0);
+    const [dropdownItems, setDropdownItems] = useState([]);
+    const [showDropdownAtEnd, setShowDropdownAtEnd] = useState(false);
+    const editingConditionId = useRef(null);
+    const nextEditingPart = useRef(null);
+    const conditionParams = useRef(CONDITION_PARAMS);
+    const conditionHasChanged = useRef(false);
 
-  const itemsListWidth =
-    inputField && inputField.current
-      ? inputField.current.clientWidth - 14
-      : MAX_DROPDOWN_WIDTH;
-  const dropdownWidth = Math.min(itemsListWidth, MAX_DROPDOWN_WIDTH);
-  const checkboxWidth = (dropdownWidth - 32) / 2;
-
-  const checkHandler = (optionIdx, valueIdx) => {
-    const vals = [...values];
-    vals[optionIdx][valueIdx].isSelected =
-      !vals[optionIdx][valueIdx].isSelected;
-
-    const { fltrItems, itemUpdated } = [...filterItems].reduce(
-      (acc, fi) => {
-        if (fi.optionIndex !== optionIdx)
-          return {
-            ...acc,
-            fltrItems: [...acc.fltrItems, fi],
-          };
-        return vals[optionIdx][valueIdx].isSelected
-          ? {
-              ...acc,
-              fltrItems: [
-                ...acc.fltrItems,
-                {
-                  ...fi,
-                  matchText: '',
-                  valueIndexes: [...fi.valueIndexes, valueIdx],
-                },
-              ],
-              itemUpdated: true,
-            }
-          : { ...acc, itemUpdated: true };
-      },
-      { fltrItems: [], itemUpdated: false }
-    );
-    if (!itemUpdated) {
-      const { option: attribute, type } = options[optionIdx];
-      fltrItems.push({
-        attribute,
-        optionIndex: optionIdx,
-        type,
-        valueIndexes: [valueIdx],
-      });
-      setConjunctions((cnjs) => [...cnjs, 'AND']);
-    }
-
-    if (vals[optionIdx][valueIdx].isSelected)
-      setTextMatchIsSelected((tms) =>
-        tms.map((tm, i) => (i === optionIdx ? false : tm))
-      );
-    setValues(vals);
-    setFilterItems(fltrItems);
-  };
-
-  const checkTextMatchHandler = (optionIdx) => {
-    const isSelected = !textMatchIsSelected[optionIdx];
-    const matchText = isSelected ? searchTexts[optionIdx] : '';
-    setTextMatchIsSelected((tms) =>
-      tms.map((t, i) => (i === optionIdx ? isSelected : t))
-    );
-    setValues((vals) =>
-      vals.map((val, i) =>
-        i === optionIdx ? val.map((v) => ({ ...v, isSelected: false })) : val
-      )
-    );
-    const { fltrItems, itemUpdated } = [...filterItems].reduce(
-      (acc, fi) => {
-        if (fi.optionIndex !== optionIdx)
-          return {
-            ...acc,
-            fltrItems: [...acc.fltrItems, fi],
-          };
-        return isSelected
-          ? {
-              ...acc,
-              fltrItems: [
-                ...acc.fltrItems,
-                { ...fi, matchText, valueIndexes: [] },
-              ],
-              itemUpdated: true,
-            }
-          : { ...acc, itemUpdated: true };
-      },
-      { fltrItems: [], itemUpdated: false }
-    );
-    if (!itemUpdated) {
-      const { option: attribute, type } = options[optionIdx];
-      fltrItems.push({
-        attribute,
-        optionIndex: optionIdx,
-        type,
-        matchText,
-        valueIndexes: [],
-      });
-      setConjunctions((cnjs) => [...cnjs, 'AND']);
-    }
-    setFilterItems(fltrItems);
-  };
-
-  const updateOptionsSearchText = (evt) => {
-    const searchText = evt.target.value;
-    setOptionsSearchText(searchText);
-    const searchRE = new RegExp(searchText, 'i');
-    setIsOptionDisplayed(options.map(({ option }) => searchRE.test(option)));
-    setShowItemsList(true);
-  };
-
-  const updateSearchText = (evt, option, idx) => {
-    const searchText = evt.target.value;
-    setSearchTexts((sts) => sts.map((st, i) => (i === idx ? searchText : st)));
-    const searchRE = new RegExp(searchText.replaceAll('%', '.*'), 'i');
-
-    clearTimeout(searchTimeout.current);
-    if (searchText.trim()) {
-      searchTimeout.current = setTimeout(async () => {
-        setOptionsLoading(optionsLoading.map((l, i) => (i === idx ? true : l)));
-        const updatedValues = await loadValuesLive(
-          option.option,
-          option.type,
-          idx,
-          searchText,
-          searchRE
-        );
-        setValues(
-          options.map((_, i) => (i === idx ? updatedValues : values[i]))
-        );
-        setShownValues(
-          shownValues.map((s, i) =>
-            i === idx // eslint-disable-line no-nested-ternary
-              ? updatedValues.length > 6
-                ? 5
-                : updatedValues.length
-              : s
-          )
-        );
-        setOptionsLoading(
-          optionsLoading.map((l, i) => (i === idx ? false : l))
-        );
-      }, 500);
-    } else {
-      setValues(
-        values.map((val, i) =>
-          i === idx ? val.map((v) => ({ ...v, isIncluded: true })) : val
-        )
-      );
-      setShownValues(
-        shownValues.map((show, i) =>
-          i === idx ? shownCount(values[idx].length, show) : show
-        )
-      );
-    }
-  };
-
-  const includedValuesCount = (arr) =>
-    arr.filter((val) => val.isIncluded).length;
-
-  const shownCount = (count, show = MIN_ITEMS_SHOWN) =>
-    count > Math.max(show, MIN_ITEMS_SHOWN)
-      ? Math.max(show, MIN_ITEMS_SHOWN)
-      : count;
-
-  const optionClickHandler = async (option, idx) => {
-    const shouldLoad = !values[idx].length;
-    setIsOptionOpen((ioo) => ioo.map((o, i) => (i === idx ? !o : o)));
-    setOptionsLoading(
-      optionsLoading.map((l, i) => (i === idx && shouldLoad ? true : l))
-    );
-    if (shouldLoad) loadValues(option, idx);
-  };
-
-  const updateShownValues = (evt, idx) => {
-    evt.preventDefault();
-    const shown = [...shownValues];
-    shown[idx] = values[idx].filter((val) => val.isIncluded).length;
-    setShownValues(shown);
-  };
-
-  const shownAndIncluded = (vals, idx) =>
-    [...vals].reduce(
-      (acc, cur) =>
-        cur.isIncluded && acc.length < shownValues[idx] ? [...acc, cur] : acc,
+    useImperativeHandle(
+      ref,
+      () => ({
+        setSelections: (sel = []) => {
+          editingConditionId.current = null;
+          nextEditingPart.current = null;
+          conditionParams.current = CONDITION_PARAMS;
+          conditionHasChanged.current = false;
+          setConditions((conds) => (Array.isArray(sel) ? sel : conds));
+          setEditingPart(0);
+          setDropdownItems([]);
+          setShowDropdownAtEnd(false);
+        },
+      }),
       []
     );
 
-  const loadValues = async (option, idx) => {
-    const vals = getValues ? await getValues(option.option) : [];
-    setValues(
-      options.map((o, i) =>
-        i === idx
-          ? (vals || []).map((v) =>
-              valueObject({ value: v, isSelected: false }, o)
-            )
-          : values[i]
-      )
-    );
-    setShownValues(
-      shownValues.map(
-        (s, i) => (i === idx ? (vals.length > 6 ? 5 : vals.length) : s) // eslint-disable-line no-nested-ternary
-      )
-    );
-    setOptionsLoading(optionsLoading.map((l, i) => (i === idx ? false : l)));
-  };
+    const addCondition = useCallback(() => {
+      const id = uuid();
+      editingConditionId.current = id;
+      conditionParams.current = CONDITION_PARAMS;
+      setConditions((conds) => [...conds, { ...CONDITION_OBJECT, id }]);
+      setShowDropdownAtEnd(true);
+    }, []);
 
-  const loadValuesLive = async (attr, type, idx, searchStr, searchRE) => {
-    let cond = ` WHERE `;
-    if (type === 'string') {
-      cond += ` ${attr} LIKE '%${searchStr}%' `; // TODO: remove '%' if not needed
-    } else {
-      const matches = [...searchStr.matchAll(/([><]+)\s{0,}([.-\d]{1,})/g)];
-      if (matches.length) {
-        cond += matches
-          .map(([, op, num]) =>
-            op && !isNaN(num) ? ` ${attr} ${op} ${Number(num)} ` : ''
-          )
-          .join(' AND ');
+    const addNextTokenHandler = useCallback(() => {
+      if (!conditions.length) {
+        addCondition();
       } else {
-        const sanitizedSearchStr = searchStr.replace(/[^\w\s]/gi, '');
-        cond += ` ${attr} = ${sanitizedSearchStr || 'false'} `;
+        const lastCond = conditions[conditions.length - 1];
+        if (!lastCond || lastCond.conjunction) {
+          addCondition();
+        } else {
+          editingConditionId.current = lastCond.id;
+          conditionParams.current = paramsForCondition(lastCond);
+          const nextPart = nextPartForCondition(lastCond);
+          setEditingPart(nextPart);
+          setShowDropdownAtEnd(true);
+        }
       }
-    }
-    const vals = getValues ? await getValues(attr, cond) : [];
-    const prevValues = values[idx].map((v) => ({
-      ...v,
-      isIncluded: searchRE.test(v.display) || vals.includes(v.value),
-    }));
-    return vals.reduce((acc, val) => {
-      if (!acc.some((v) => v.value === val))
-        acc.push(
-          valueObject({ value: val, isSelected: false }, { type, option: attr })
+    }, [addCondition, conditions]);
+
+    const deleteCondition = useCallback((id) => {
+      editingConditionId.current = null;
+      conditionParams.current = CONDITION_PARAMS;
+      conditionHasChanged.current = true;
+      setConditions((conds) => conds.filter((cond) => cond.id !== id));
+    }, []);
+
+    const dropdownChangeHandler = (selections) => {
+      const curCondId = editingConditionId.current;
+      conditionHasChanged.current = true;
+      if (editingPart === FILTER_PARTS.KEY) {
+        conditionParams.current = {
+          ...conditionParams.current,
+          optionType: selections.type,
+          optionIndex: selections.index,
+        };
+        setConditions((conds) =>
+          conds.map((cond) =>
+            cond.id === curCondId ? { ...cond, key: selections } : cond
+          )
         );
-      return acc;
-    }, prevValues);
-  };
+      } else if (editingPart === FILTER_PARTS.OPERATOR) {
+        conditionParams.current = {
+          ...conditionParams.current,
+          multiValue: !!selections.multiValue,
+          noValueNeeded: !!selections.noValueNeeded,
+          partialMatches: !!selections.partialMatches,
+        };
+        setConditions((conds) =>
+          conds.map((cond) => {
+            if (cond.id !== curCondId) return cond;
+            let values = cond.values;
+            if (selections.multiValue && !Array.isArray(values)) {
+              values = [values];
+            } else if (!selections.multiValue && values?.length) {
+              values = [];
+            }
+            return {
+              ...cond,
+              values,
+              operator: selections,
+            };
+          })
+        );
+      } else if (editingPart === FILTER_PARTS.VALUES) {
+        if (Array.isArray(selections)) {
+          nextEditingPart.current = FILTER_PARTS.VALUES;
+          setShowDropdownAtEnd(false);
+        }
+        setConditions((conds) =>
+          conds.map((cond) =>
+            cond.id === curCondId ? { ...cond, values: selections } : cond
+          )
+        );
+      } else if (editingPart === FILTER_PARTS.CONJUNCTION) {
+        setConditions((conds) =>
+          conds.map((cond) =>
+            cond.id === curCondId ? { ...cond, conjunction: selections } : cond
+          )
+        );
+      }
+    };
 
-  const selectedValuesCounter = (idx) => {
-    const count = selectedValuesCount(idx);
-    if (count)
-      return <span className={styles['list-option-count']}>{count}</span>;
-  };
+    const dropdownCloseHandler = useCallback(() => setEditingPart(0), []);
 
-  const selectedValuesCount = (idx) =>
-    values[idx].reduce((acc, val) => (val.isSelected ? (acc += 1) : acc), 0);
+    useEffect(() => {
+      if (conditionHasChanged.current) {
+        conditionHasChanged.current = false;
+        onChange?.(conditions || []);
+      }
+      const curCondId = editingConditionId.current;
+      if (!curCondId) return;
+      const curCondIdx = conditions.findIndex(({ id }) => id === curCondId);
+      const nextPart =
+        nextEditingPart.current || nextPartForCondition(conditions[curCondIdx]);
+      if (nextPart) {
+        nextEditingPart.current = null;
+        setEditingPart(nextPart);
+      } else {
+        if (curCondIdx === conditions.length - 1) {
+          addCondition();
+        } else {
+          const nextCond = conditions[curCondIdx + 1];
+          editingConditionId.current = nextCond.id;
+          conditionParams.current = paramsForCondition(nextCond);
+          const nextCondPart = nextCond?.key
+            ? FILTER_PARTS.OPERATOR
+            : FILTER_PARTS.KEY;
+          setEditingPart(nextCondPart);
+        }
+      }
+    }, [conditions, onChange]);
 
-  const removeFilterItem = (idx) => {
-    const fltrItems = [...filterItems];
-    const cnjctns = [...conjunctions];
-    const optIdx = fltrItems[idx].optionIndex;
-    const vals = values.map((opt, i) =>
-      i === optIdx ? opt.map((val) => ({ ...val, isSelected: false })) : opt
-    );
-    fltrItems.splice(idx, 1);
-    cnjctns.splice(idx, 1);
-    setTextMatchIsSelected((tms) =>
-      tms.map((t, i) => (i === optIdx ? false : t))
-    );
-    setConjunctions(cnjctns);
-    setFilterItems(fltrItems);
-    setValues(vals);
-  };
+    useEffect(() => {
+      if (editingPart === FILTER_PARTS.KEY) {
+        setDropdownItems(
+          () =>
+            options.map(({ option: value, type }, index) => ({
+              value,
+              type,
+              index,
+            })) || []
+        );
+      } else if (editingPart === FILTER_PARTS.OPERATOR) {
+        setDropdownItems(() =>
+          conditionParams.current.optionType in OPERATORS
+            ? OPERATORS[conditionParams.current.optionType]
+            : []
+        );
+      } else if (editingPart === FILTER_PARTS.VALUES) {
+        setDropdownItems(() =>
+          conditionParams.current.optionIndex in options
+            ? options[conditionParams.current.optionIndex]?.values || []
+            : []
+        );
+      } else if (editingPart === FILTER_PARTS.CONJUNCTION) {
+        setDropdownItems(() => [...CONJUNCTIONS]);
+      } else {
+        setDropdownItems(() => []);
+      }
+    }, [options, editingPart]);
 
-  const changeConjunction = (idx, operator) =>
-    setConjunctions(
-      conjunctions.map((conj, i) => (i === idx ? operator : conj))
-    );
+    const dropdownSelected = useMemo(() => {
+      const cond = conditions[conditions.length - 1];
+      if (!cond) return [];
+      if (editingPart === FILTER_PARTS.KEY) return cond.key ? [cond.key] : [];
+      if (editingPart === FILTER_PARTS.OPERATOR)
+        return cond.operator ? [cond.operator] : [];
+      if (editingPart === FILTER_PARTS.VALUES)
+        return Array.isArray(cond.values) ? cond.values : [cond.values];
+      if (editingPart === FILTER_PARTS.CONJUNCTION)
+        return cond.conjunction ? [cond.conjunction] : [];
+      return [];
+    }, [conditions, editingPart]);
 
-  const changeMatchTypeHandler = (idx, isNotMatch, evt) => {
-    evt.stopPropagation();
-    setIsOptionNotMatchArr((arr) =>
-      arr.map((onm, i) => (i === idx ? isNotMatch : onm))
-    );
-  };
+    const shouldAllowPartials =
+      editingPart === FILTER_PARTS.VALUES &&
+      !!conditions.find(({ id }) => id === editingConditionId.current)?.operator
+        ?.partialMatches;
 
-  const groupBar = (group) => {
-    lastGroup.current = group;
-    return <div className={styles['list-group']}>{group}</div>;
-  };
+    const isMultiSelect =
+      editingPart === FILTER_PARTS.VALUES &&
+      !!conditions.find(({ id }) => id === editingConditionId.current)?.operator
+        ?.multiValue;
 
-  return (
-    <div className={styles['filter-bar']} ref={thisComponent}>
-      <div className={styles['input-field']} ref={inputField}>
-        <div className={styles['input-field-icon']}>
-          <img src={FilterByIcon} alt="filter by" />
-        </div>
-        <div
-          className={`${styles['input-field-input']} ${
-            !filterItems.length ? styles.placeholder : ''
-          }`}
-          onClick={() => setShowItemsList(!showItemsList)}
-        >
-          {filterItems.map((item, i) => (
-            <React.Fragment key={i}>
-              <Label
-                value={queryStringFromSelectedOption(
-                  item,
-                  values,
-                  searchTexts,
-                  isOptionNotMatchArr
-                )}
-                onRemove={() => removeFilterItem(i)}
-              />
-              <Conjunction
-                operator={conjunctions[i]}
-                isHint={i === filterItems.length - 1}
-                onChange={(operator) => changeConjunction(i, operator)}
-              />
-            </React.Fragment>
-          ))}
-          <span className={styles['input-field-search']}>
-            <input
-              type="text"
-              className="u-unstyledInput"
-              placeholder={!filterItems.length ? 'Filter by...' : ''}
-              value={optionsSearchText}
-              onChange={updateOptionsSearchText}
-            />
-          </span>
-        </div>
-      </div>
-      {showItemsList ? (
-        <div className={styles['list']} style={{ width: dropdownWidth }}>
-          {options.map((option, i) =>
-            isOptionDisplayed[i] ? (
-              <>
-                {option.group && option.group !== lastGroup.current
-                  ? groupBar(option.group)
-                  : null}
-                <div className={styles['list-options']}>
+    const conditionPill = useCallback(
+      (cond) => {
+        if (!cond?.key) return null;
+        return (
+          <>
+            <div className={styles['filter-block']}>
+              {FILTER_PARTS_ARR.slice(0, 3).map((part) => {
+                const token = cond[part];
+                const isKey = part === FILTER_PARTS_ARR_KEYS.KEY;
+                const isValues = part === FILTER_PARTS_ARR_KEYS.VALUES;
+                const isValuesArr = isValues && Array.isArray(token);
+                if (!(token?.value || (isValuesArr && token?.length)))
+                  return null;
+
+                const isBeingEdited =
+                  editingConditionId.current === cond.id &&
+                  editingPart === filterPartFromPart(part);
+                const shouldAllowPartials =
+                  isValues && !!cond.operator?.partialMatches;
+                const isMultiSelect = isValues && !!cond.operator?.multiValue;
+                return (
                   <div
-                    className={styles['list-option']}
-                    onClick={() => optionClickHandler(option, i)}
+                    key={`${cond.id}_${part}`}
+                    className={`${styles['filter-token']} ${
+                      isBeingEdited ? styles['is-editing'] : ''
+                    }`}
+                    onClick={() => {
+                      if (isKey) return;
+                      editingConditionId.current = cond.id;
+                      conditionParams.current = paramsForCondition(cond);
+                      setShowDropdownAtEnd(false);
+                      setEditingPart(FILTER_PARTS[part.toUpperCase()]);
+                    }}
                   >
-                    <img
-                      src={isOptionOpen[i] ? OpenIcon : CloseIcon}
-                      alt="show or hide options"
-                    />
-                    <span>{option.option}</span>
-                    {optionsLoading[i] ? (
-                      <Spinner inline />
-                    ) : (
-                      selectedValuesCounter(i)
-                    )}
-                    {isOptionOpen[i] ? (
-                      <span
-                        className={`${styles['list-option-picker']} ${
-                          !selectedValuesCount(i) ? styles.lighten : ''
-                        }`}
-                      >
-                        <span
-                          className={`${styles.equal} ${
-                            !isOptionNotMatchArr[i] ? styles.selected : ''
-                          }`}
-                          onClick={(evt) =>
-                            changeMatchTypeHandler(i, false, evt)
-                          }
-                        />
-                        <span
-                          className={`${styles['not-equal']} ${
-                            isOptionNotMatchArr[i] ? styles.selected : ''
-                          }`}
-                          onClick={(evt) =>
-                            changeMatchTypeHandler(i, true, evt)
-                          }
-                        />
-                      </span>
+                    <span>
+                      {isValuesArr
+                        ? token
+                            ?.map(({ value }) => value)
+                            .filter(Boolean)
+                            .join(', ')
+                        : token?.value}
+                    </span>
+                    {isBeingEdited ? (
+                      <Dropdown
+                        items={dropdownItems}
+                        selected={isValuesArr ? token : [token]}
+                        onChange={dropdownChangeHandler}
+                        onClose={dropdownCloseHandler}
+                        allowPartialMatches={shouldAllowPartials}
+                        isMultiSelect={isMultiSelect}
+                        hasSearch={isKey || isValues}
+                      />
                     ) : null}
                   </div>
-                  {isOptionOpen[i] ? (
-                    <>
-                      <div className={styles['list-option-search']}>
-                        <img src={SearchIcon} alt="search options" />
-                        <input
-                          type="text"
-                          placeholder="type to filter or for partial matches"
-                          style={{ backgroundColor: '#FFF' }}
-                          value={searchTexts[i]}
-                          onChange={(evt) => updateSearchText(evt, option, i)}
-                        />
-                      </div>
-                      <div className={styles['list-option-values']}>
-                        {option.type === 'string' && searchTexts[i] ? (
-                          <Value
-                            value={textMatchObject(
-                              searchTexts[i],
-                              isOptionNotMatchArr[i],
-                              textMatchIsSelected[i]
-                            )}
-                            width={checkboxWidth}
-                            optionIndex={i}
-                            valueIndex={99999}
-                            onChange={checkTextMatchHandler}
-                          />
-                        ) : null}
-                        {shownAndIncluded(values[i], i).map((value, j) => (
-                          <Value
-                            value={value}
-                            width={checkboxWidth}
-                            optionIndex={i}
-                            valueIndex={j}
-                            onChange={checkHandler}
-                            key={j}
-                          />
-                        ))}
-                        {includedValuesCount(values[i]) > shownValues[i] ? (
-                          <div
-                            className={styles['list-option-value']}
-                            style={{ width: checkboxWidth }}
-                          >
-                            <a
-                              onClick={(evt) => updateShownValues(evt, i)}
-                            >{`Show ${
-                              includedValuesCount(values[i]) - shownValues[i]
-                            } more...`}</a>
-                          </div>
-                        ) : null}
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-              </>
-            ) : null
-          )}
+                );
+              })}
+              <div
+                className={styles['del-btn']}
+                onClick={() => deleteCondition(cond.id)}
+              >
+                <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__CLOSE__SIZE_8} />
+              </div>
+            </div>
+            {cond.conjunction ? (
+              <div
+                key={`${cond.id}_conjunction`}
+                className={`${styles['filter-conjunction']} ${
+                  editingConditionId.current === cond.id &&
+                  editingPart === FILTER_PARTS.CONJUNCTION
+                    ? styles['is-editing']
+                    : ''
+                }`}
+                onClick={() => {
+                  editingConditionId.current = cond.id;
+                  conditionParams.current = paramsForCondition(cond);
+                  setShowDropdownAtEnd(false);
+                  setEditingPart(FILTER_PARTS.CONJUNCTION);
+                }}
+              >
+                <span>{cond.conjunction.value}</span>
+                {editingConditionId.current === cond.id &&
+                editingPart === FILTER_PARTS.CONJUNCTION ? (
+                  <Dropdown
+                    items={dropdownItems}
+                    selected={[cond.conjunction]}
+                    onChange={dropdownChangeHandler}
+                    onClose={dropdownCloseHandler}
+                    hasSearch={false}
+                  />
+                ) : null}
+              </div>
+            ) : null}
+          </>
+        );
+      },
+      [
+        editingPart,
+        dropdownItems,
+        deleteCondition,
+        dropdownChangeHandler,
+        dropdownCloseHandler,
+      ]
+    );
+
+    return (
+      <div className={styles['filter-bar']}>
+        {conditions.map((cond) => conditionPill(cond))}
+        <div className={styles['filter-entry']}>
+          <Button
+            iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+            sizeType={Button.SIZE_TYPE.SMALL}
+            ariaLabel="Click to filter"
+            onClick={() => addNextTokenHandler()}
+          />
+          {showDropdownAtEnd ? (
+            <Dropdown
+              items={dropdownItems}
+              selected={dropdownSelected}
+              onChange={dropdownChangeHandler}
+              onClose={dropdownCloseHandler}
+              allowPartialMatches={shouldAllowPartials}
+              isMultiSelect={isMultiSelect}
+              hasSearch={
+                editingPart === FILTER_PARTS.KEY ||
+                editingPart === FILTER_PARTS.VALUES
+              }
+            />
+          ) : null}
         </div>
-      ) : null}
-    </div>
-  );
-};
+      </div>
+    );
+  }
+);
 
 FilterBar.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      option: PropTypes.string,
-      type: PropTypes.oneOf(['string', 'number', 'boolean']),
-      isNotMatch: PropTypes.bool,
-      textMatch: PropTypes.string,
-      values: PropTypes.arrayOf(
-        PropTypes.oneOfType([
-          PropTypes.string,
-          PropTypes.shape({
-            value: PropTypes.oneOfType([
-              PropTypes.string,
-              PropTypes.number,
-              PropTypes.bool,
-            ]),
-            isSelected: PropTypes.bool,
-          }),
-        ])
-      ),
-      group: PropTypes.string,
-      info: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
-    })
-  ),
+  options: PropTypes.array,
+  defaultSelections: PropTypes.array,
   onChange: PropTypes.func,
-  getValues: PropTypes.func,
 };
+
+FilterBar.displayName = 'FilterBar';
 
 export default FilterBar;

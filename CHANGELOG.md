@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- FilterBar - updated version of FilterBar
+
+### Removed
+
+- FilterBar2 - replaced by new version of FilterBar
+
+## [1.24.3] - 2025-04-04
+
+### Changed
+
+- NRQLEditor - allow shift+enter to create new lines
+
+## [1.24.2] - 2025-04-03
+
+### Changed
+
 - FilterBar2 - return an array of filters too in the onChange function
 
 ## [1.24.1] - 2025-04-02
