@@ -87,6 +87,7 @@ const CONDITION_OBJECT = {
 const CONDITION_PARAMS = {
   optionType: null,
   optionIndex: -1,
+  optionOperators: null,
   multiValue: false,
   noValueNeeded: false,
   partialMatches: false,
@@ -110,10 +111,17 @@ const nextPartForCondition = ({ key, operator, values, conjunction } = {}) => {
 
 const paramsForCondition = (cond) => {
   const optionType = cond.key?.type;
+  const optionOperators = cond.key?.operators;
   const optionIndex = Number.isInteger(cond.key?.index) ? cond.key.index : -1;
   const multiValue = !!cond.operator?.multiValue;
   const noValueNeeded = !!cond.operator?.noValueNeeded;
-  return { optionType, optionIndex, multiValue, noValueNeeded };
+  return {
+    optionType,
+    optionOperators,
+    optionIndex,
+    multiValue,
+    noValueNeeded,
+  };
 };
 
 const FilterBar = forwardRef(
@@ -186,6 +194,7 @@ const FilterBar = forwardRef(
           ...conditionParams.current,
           optionType: selections.type,
           optionIndex: selections.index,
+          optionOperators: selections.operators,
         };
         setConditions((conds) =>
           conds.map((cond) =>
@@ -268,18 +277,19 @@ const FilterBar = forwardRef(
       if (editingPart === FILTER_PARTS.KEY) {
         setDropdownItems(
           () =>
-            options.map(({ option: value, type }, index) => ({
+            options.map(({ option: value, type, operators }, index) => ({
               value,
               type,
+              operators,
               index,
             })) || []
         );
       } else if (editingPart === FILTER_PARTS.OPERATOR) {
-        setDropdownItems(() =>
-          conditionParams.current.optionType in OPERATORS
-            ? OPERATORS[conditionParams.current.optionType]
-            : []
-        );
+        setDropdownItems(() => {
+          const { optionOperators, optionType } = conditionParams.current;
+          if (optionOperators) return optionOperators;
+          return OPERATORS[optionType] || [];
+        });
       } else if (editingPart === FILTER_PARTS.VALUES) {
         setDropdownItems(() =>
           conditionParams.current.optionIndex in options
