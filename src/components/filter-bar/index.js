@@ -125,7 +125,7 @@ const paramsForCondition = (cond) => {
 };
 
 const FilterBar = forwardRef(
-  ({ options, defaultSelections = [], onChange, isDisabled = false}, ref) => {
+  ({ options, defaultSelections = [], onChange, isDisabled = false }, ref) => {
     const [conditions, setConditions] = useState(
       Array.isArray(defaultSelections) ? defaultSelections : []
     );
