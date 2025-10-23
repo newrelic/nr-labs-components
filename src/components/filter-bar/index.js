@@ -246,6 +246,12 @@ const FilterBar = forwardRef(
     const dropdownCloseHandler = useCallback(() => setEditingPart(0), []);
 
     useEffect(() => {
+      if (isDisabled) {
+        setEditingPart(0);
+        setShowDropdownAtEnd(false);
+        return;
+      }
+
       if (conditionHasChanged.current) {
         conditionHasChanged.current = false;
         onChange?.(conditions || []);
@@ -271,7 +277,7 @@ const FilterBar = forwardRef(
           setEditingPart(nextCondPart);
         }
       }
-    }, [conditions, onChange]);
+    }, [conditions, onChange, isDisabled]);
 
     useEffect(() => {
       if (editingPart === FILTER_PARTS.KEY) {
@@ -439,6 +445,7 @@ const FilterBar = forwardRef(
             sizeType={Button.SIZE_TYPE.SMALL}
             ariaLabel="Click to filter"
             onClick={() => addNextTokenHandler()}
+            disabled={isDisabled}
           />
           {showDropdownAtEnd ? (
             <Dropdown
@@ -464,6 +471,7 @@ FilterBar.propTypes = {
   options: PropTypes.array,
   defaultSelections: PropTypes.array,
   onChange: PropTypes.func,
+  isDisabled: PropTypes.bool,
 };
 
 FilterBar.displayName = 'FilterBar';
