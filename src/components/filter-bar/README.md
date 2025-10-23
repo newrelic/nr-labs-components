@@ -30,6 +30,7 @@ The FilterBar component accepts the following props:
 - `options` (array) - an array of option objects. See below for object properties.
 - `onChange` (function) - a callback function that is called when selections change; the function receives an array of selections object (see below)
 - `defaultSelection` (array) - an array containing the selections when the component loads up.
+- `isDisabled` (bool) - a boolean that controls if the filter should be disabled from any interactions or not
 
 Optionally, a ref can be passed to the component which is useful for updating the selections in the component from a parent component.
 

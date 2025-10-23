@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- FilterBar - add `isDisabled` prop to disable entry button
+
+## [2.0.2] - 2025-10-23
+
+### Changed
+
 - FilterBar - allow options to optionally specify a set of `operators`
 
 ## [2.0.0] - 2025-06-16
