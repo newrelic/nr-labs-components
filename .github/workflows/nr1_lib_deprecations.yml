@@ -9,14 +9,17 @@ jobs:
     steps:
       - name: Test Default Branch
         id: default-branch
-        uses: actions/github-script@v8
+        uses: actions/github-script@v2
         with:
           script: |
             const data = await github.repos.get(context.repo)
             return data.data && data.data.default_branch === context.ref.split('/').slice(-1)[0]
+      - name: Echo default branch
+        run: |
+          echo "The default branch from the previous step is: ${{ steps.default-branch.outputs.result }}"
       - name: Checkout Self
         if: ${{ steps.default-branch.outputs.result == 'true' }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v2
       - name: Run Repolinter
         if: ${{ steps.default-branch.outputs.result == 'true' }}
         uses: newrelic/repolinter-action@v1
