@@ -22,18 +22,18 @@ jobs:
       # Checkout fetch-depth: 2 because there's a check to see if package.json
       # was updated, and need at least 2 commits for the check to function properly
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v2
         with:
           fetch-depth: 2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v5
         with:
           node-version: 24.x
 
       - name: Download Cached Deps
         id: cache-node-modules
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         env:
           cache-name: node-modules
         with:
@@ -82,7 +82,7 @@ jobs:
       - name: Temporarily disable "required_pull_request_reviews" branch protection
         id: disable-branch-protection
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v1
         with:
           github-token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
           previews: luke-cage-preview
@@ -100,7 +100,7 @@ jobs:
 
       - name: Push Commit
         if: steps.generate-notices.outputs.commit == 'true'
-        uses: ad-m/github-push-action@v1.0.0
+        uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
           branch: main
@@ -108,7 +108,7 @@ jobs:
       - name: Re-enable "required_pull_request_reviews" branch protection
         id: enable-branch-protection
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v1
         with:
           github-token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
           previews: luke-cage-preview
@@ -133,13 +133,13 @@ jobs:
       # Checkout ref: main because previous job committed third_party_notices and
       # we need to checkout main to pick up that commit
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v2
         with:
           ref: main
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v5
         with:
           node-version: 24.x
           registry-url: https://registry.npmjs.org
@@ -150,7 +150,7 @@ jobs:
       - name: Temporarily disable "required_pull_request_reviews" branch protection
         id: disable-branch-protection
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v1
         with:
           github-token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
           previews: luke-cage-preview
@@ -181,7 +181,7 @@ jobs:
       - name: Re-enable "required_pull_request_reviews" branch protection
         id: enable-branch-protection
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v1
         with:
           github-token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
           previews: luke-cage-preview
