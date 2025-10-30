@@ -16,7 +16,7 @@ jobs:
             return data.data
       - name: Echo repo output
         run: |
-          echo "Output from fetching repo: ${{ toJSON(steps.repo-output.outputs }}"
+          echo "Output from fetching repo: ${{ toJSON(steps.repo-output.outputs) }}"
       - name: Test Default Branch
         id: default-branch
         uses: actions/github-script@v2
