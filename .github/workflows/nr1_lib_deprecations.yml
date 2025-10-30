@@ -7,6 +7,16 @@ jobs:
     name: Run NR1 Library Deprecation Checks
     runs-on: ubuntu-latest
     steps:
+      - name: Testing Repo Output
+        id: repo-output
+        uses: actions/github-script@v2
+        with:
+          script: |
+            const data = await github.repos.get(context.repo)
+            return data.data
+      - name: Echo repo output
+        run: |
+          echo "Output from fetching repo: ${{ toJSON(steps.repo-output.outputs }}"
       - name: Test Default Branch
         id: default-branch
         uses: actions/github-script@v2
@@ -14,9 +24,6 @@ jobs:
           script: |
             const data = await github.repos.get(context.repo)
             return data.data && data.data.default_branch === context.ref.split('/').slice(-1)[0]
-      - name: Echo default branch
-        run: |
-          echo "The default branch from the previous step is: ${{ steps.default-branch.outputs.result }}"
       - name: Checkout Self
         if: ${{ steps.default-branch.outputs.result == 'true' }}
         uses: actions/checkout@v2
