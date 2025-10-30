@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       
@@ -30,7 +30,7 @@ jobs:
             echo "content=👍 Updated **CHANGELOG.md** found." >> $GITHUB_OUTPUT
           fi
       
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
           script: |
