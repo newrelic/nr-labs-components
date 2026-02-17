@@ -190,15 +190,19 @@ const FilterBar = forwardRef(
       const curCondId = editingConditionId.current;
       conditionHasChanged.current = true;
       if (editingPart === FILTER_PARTS.KEY) {
+        const updatedSelection = {
+          ...selections,
+          type: selections.type || 'string',
+        };
         conditionParams.current = {
           ...conditionParams.current,
-          optionType: selections.type,
-          optionIndex: selections.index,
-          optionOperators: selections.operators,
+          optionType: updatedSelection.type,
+          optionIndex: updatedSelection.index,
+          optionOperators: updatedSelection.operators,
         };
         setConditions((conds) =>
           conds.map((cond) =>
-            cond.id === curCondId ? { ...cond, key: selections } : cond
+            cond.id === curCondId ? { ...cond, key: updatedSelection } : cond
           )
         );
       } else if (editingPart === FILTER_PARTS.OPERATOR) {
@@ -297,11 +301,25 @@ const FilterBar = forwardRef(
           return OPERATORS[optionType] || [];
         });
       } else if (editingPart === FILTER_PARTS.VALUES) {
-        setDropdownItems(() =>
-          conditionParams.current.optionIndex in options
-            ? options[conditionParams.current.optionIndex]?.values || []
-            : []
-        );
+        setDropdownItems(() => {
+          const curOptionValues =
+            conditionParams.current.optionIndex in options
+              ? options[conditionParams.current.optionIndex]?.values || []
+              : [];
+          const curCondValues = conditions.find(
+            ({ id }) => id === editingConditionId.current
+          )?.values;
+          const curCondValsArr = Array.isArray(curCondValues)
+            ? curCondValues
+            : isValidValues(curCondValues)
+            ? [curCondValues]
+            : [];
+          const valsArr = curCondValsArr.filter(
+            (condVal) =>
+              !curOptionValues.some((optVal) => optVal.value === condVal.value)
+          );
+          return [...valsArr, ...curOptionValues];
+        });
       } else if (editingPart === FILTER_PARTS.CONJUNCTION) {
         setDropdownItems(() => [...CONJUNCTIONS]);
       } else {
@@ -323,9 +341,7 @@ const FilterBar = forwardRef(
     }, [conditions, editingPart]);
 
     const shouldAllowPartials =
-      editingPart === FILTER_PARTS.VALUES &&
-      !!conditions.find(({ id }) => id === editingConditionId.current)?.operator
-        ?.partialMatches;
+      editingPart === FILTER_PARTS.VALUES || editingPart === FILTER_PARTS.KEY;
 
     const isMultiSelect =
       editingPart === FILTER_PARTS.VALUES &&
