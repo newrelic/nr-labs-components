@@ -48,6 +48,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-url": "^8.0.1",
     "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^13.1.4",
     "@svgr/rollup": "^6.5.1",
     "babel-jest": "^29.5.0",
     "enzyme": "^3.11.0",
@@ -68,7 +69,8 @@
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "sass": "^1.57.1"
+    "sass": "^1.57.1",
+    "semantic-release": "^25.0.3"
   },
   "dependencies": {
     "dayjs": "^1.11.7",
