@@ -31,7 +31,7 @@ const Dropdown = ({
   useEffect(() => {
     if (!hasSearch && dropdownRef.current) {
       setTimeout(() => {
-        dropdownRef.current.focus();
+        dropdownRef.current?.focus();
       }, 0);
     }
   }, [hasSearch]);

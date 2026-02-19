@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- FilterBar - guard on set focus call in settimeout
+
+## [2.0.3] - 2026-02-18
+
 ### Changed
 
 - Switch to npm trusted publishing
