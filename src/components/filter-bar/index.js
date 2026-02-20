@@ -365,8 +365,7 @@ const FilterBar = forwardRef(
                 const isBeingEdited =
                   editingConditionId.current === cond.id &&
                   editingPart === filterPartFromPart(part);
-                const shouldAllowPartials =
-                  isValues && !!cond.operator?.partialMatches;
+                const shouldAllowPartials = isKey || isValues;
                 const isMultiSelect = isValues && !!cond.operator?.multiValue;
                 return (
                   <div
