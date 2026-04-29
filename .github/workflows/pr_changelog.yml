@@ -1,5 +1,5 @@
 on: 
-  pull_request_target:
+  pull_request:
     types:
       - opened
       - synchronize
@@ -10,29 +10,34 @@ on:
 jobs:
   check-changelog-updates:
     runs-on: ubuntu-latest
+    # Explicitly grant permission to post comments
+    permissions:
+      pull-requests: write
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       
       - name: Check for changelog
         id: check-changelog
         run: |
-          echo "count=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -c '^CHANGELOG.md$')" >> $GITHUB_OUTPUT
+          # Compare the PR head against the base branch
+          echo "count=$(git diff --name-only origin/main...HEAD | grep -c '^CHANGELOG.md$')" >> $GITHUB_OUTPUT
       
       - name: Set comment body
         id: comment-body
         run: |
-          if ${{ steps.check-changelog.outputs.count == 0 }}; then
+          if [ "${{ steps.check-changelog.outputs.count }}" -eq "0" ]; then
             echo "content=❗ **CHANGELOG.md** has not been updated." >> $GITHUB_OUTPUT
           else
             echo "content=👍 Updated **CHANGELOG.md** found." >> $GITHUB_OUTPUT
           fi
       
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
+          # Use GITHUB_TOKEN instead of a custom secret for security and fork support
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
