@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.5] - 2026-02-20
+
 ### Fixed
 
 - FilterBar - allow freeform editing existing values
 
-## [2.0.9] - 2026-02-19
+## [2.0.4] - 2026-02-19
 
 ### Fixed
 
