@@ -1,6 +1,6 @@
 {
   "name": "@newrelic/nr-labs-components",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "New Relic Labs components",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -39,7 +39,11 @@
     "react": "15 - 18",
     "react-dom": "15 - 18"
   },
-  "peerDependenciesMeta": { "nr1": { "optional": true } },
+  "peerDependenciesMeta": {
+    "nr1": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.20.2",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
