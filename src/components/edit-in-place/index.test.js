@@ -1,19 +1,20 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 
 import EditInPlace from './';
 
 describe('EditInPlace component', () => {
   it('displays a contenteditable div with the default placeholder', () => {
-    const wrapper = shallow(<EditInPlace />);
-    expect(wrapper.type()).toBe('div');
-    expect(wrapper.prop('contentEditable')).toBe(true);
-    expect(wrapper.prop('data-placeholder')).toBe('Untitled');
+    const { container } = render(<EditInPlace />);
+    const editable = container.querySelector('[contenteditable]');
+    expect(editable.tagName).toBe('DIV');
+    expect(editable.getAttribute('contenteditable')).toBe('true');
+    expect(editable.getAttribute('data-placeholder')).toBe('Untitled');
   });
 
   it('displays the passed value', () => {
     const value = 'Hello, World!';
-    const wrapper = mount(<EditInPlace value={value} />);
-    expect(wrapper.text()).toBe(value);
+    render(<EditInPlace value={value} />);
+    expect(screen.getByText(value)).toBeInTheDocument();
   });
 });
